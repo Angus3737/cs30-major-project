@@ -7,8 +7,8 @@
 //- Used paint.net to edit the designs of the pieces
 //- Added an html link for instructions
 
-const CELL_SIZE = 80;
-let rows = 9;
+const CELL_SIZE = 70;
+let rows = 10;
 let cols = 9;
 let pieceSelected = false;
 let redKing;
@@ -22,11 +22,12 @@ let winner;
 let board = [
   ['c', 'c', 'c', 'c', 'k', 'c', 'c', 'c', 'c'],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, bcan, 0, 0, 0, 0, 0, bcan, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, rcan, 0, 0, 0, 0, 0, rcan, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   ['rc', 'rc', 'rc', 'rc', 'rk', 'rc', 'rc', 'rc', 'rc']
 ];
@@ -35,8 +36,24 @@ function preload() {
   //load images for pieces and river
   redKing = loadImage("redking.png");
   blackKing = loadImage("blackking.png");
+
+  redPawn = loadImage("redpawn.png");
+  blackPawn = loadImage("blackpawn.png");
+
+  redCannon = loadImage("redcannon.png");
+  blackCannon = loadImage("blackcannon.png");
+
   redChariot = loadImage("redchariot.png");
   blackChariot = loadImage("blackchariot.png");
+
+  redHorse = loadImage("redhorse.png");
+  blackHorse = loadImage("blackhorse.png");
+
+  redElephant = loadImage("redelephant.png");
+  blackElephant = loadImage("blackelephant.png");
+
+  redGuard = loadImage("redguard.png");
+  blackGuard = loadImage("blackguard.png");
 
   water = loadImage("blue-water.avif");
 }
@@ -167,21 +184,39 @@ function movePiece(oldX, oldY, newX, newY) {
     }
   }
 
-  //can only move horizontally and veritcally
-  if (!(oldX === newX || oldY === newY)) {
-    return false;
+
+
+  if (piece === 'rc' || piece === 'bc') {
+    //can only move horizontally and veritcally
+    if (!(oldX === newX || oldY === newY)) {
+      return false;
+    }
+
+    //checks for pieces blocking path
+    if (!clearPath(oldX, oldY, newX, newY)) {
+      return false;
+    }
+
   }
 
-  //checks for pieces blocking path
-  if (!clearPath(oldX, oldY, newX, newY)) {
-    return false;
+
+  if (piece === 'rcan' || piece === 'bcan') {
+    //can only move horizontally and veritcally
+    if (!(oldX === newX || oldY === newY)) {
+      return false;
+    }
+
+    //checks for pieces blocking path
+    if (!clearPath(oldX, oldY, newX, newY)) {
+      return false;
+    }
   }
+
 
   //can't capture your own piece
   if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
     return false;
   }
-
   //moves the piece
   board[newY][newX] = piece;
   board[oldY][oldX] = 0;
