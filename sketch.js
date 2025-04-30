@@ -18,18 +18,19 @@ let selectedY = -1;
 let selectedPieceType = 0;
 let state = "redTurn";
 let winner;
+let cannonCapture;
 
 let board = [
-  ['c', 'c', 'c', 'c', 'k', 'c', 'c', 'c', 'c'],
+  ['c', 'h', 'e', 'g', 'k', 'g', 'e', 'h', 'c'],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, bcan, 0, 0, 0, 0, 0, bcan, 0],
+  [0, 'can', 0, 0, 0, 0, 0, 'can', 0],
+  ['p', 0, 'p', 0, 'p', 0, 'p', 0, 'p'],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ['rp', 0, 'rp', 0, 'rp', 0, 'rp', 0, 'rp'],
+  [0, 'rcan', 0, 0, 0, 0, 0, 'rcan', 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, rcan, 0, 0, 0, 0, 0, rcan, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  ['rc', 'rc', 'rc', 'rc', 'rk', 'rc', 'rc', 'rc', 'rc']
+  ['rc', 'rh', 're', 'rg', 'rk', 'rg', 're', 'rh', 'rc']
 ];
 
 function preload() {
@@ -113,7 +114,32 @@ function displayPieces() {
   //displays pieces using images
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
-      if (board[y][x] === 'rc') {
+
+      if (board[y][x] === 'rk') {
+        image(redKing, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+
+      else if (board[y][x] === 'k') {
+        image(blackKing, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+            
+      else if (board[y][x] === 'rp') {
+        image(redPawn, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+
+      else if (board[y][x] === 'p') {
+        image(blackPawn, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+
+      else if (board[y][x] === 'can') {
+        image(blackCannon, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+
+      else if (board[y][x] === 'rcan') {
+        image(redCannon, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+
+      else if (board[y][x] === 'rc') {
         image(redChariot, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
 
@@ -121,13 +147,29 @@ function displayPieces() {
         image(blackChariot, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
 
-      else if (board[y][x] === 'rk') {
-        image(redKing, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      else if (board[y][x] === 'rh') {
+        image(redHorse, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
 
-      else if (board[y][x] === 'k') {
-        image(blackKing, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-      }      
+      else if (board[y][x] === 'h') {
+        image(blackHorse, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+
+      else if (board[y][x] === 're') {
+        image(redElephant, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+
+      else if (board[y][x] === 'e') {
+        image(blackElephant, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+
+      else if (board[y][x] === 'rg') {
+        image(redGuard, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
+
+      else if (board[y][x] === 'g') {
+        image(blackGuard, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+      }
     }
   }
 }
@@ -184,7 +226,17 @@ function movePiece(oldX, oldY, newX, newY) {
     }
   }
 
-
+  if (piece === 'rp') {
+    if (!(Math.abs(oldY - newY) <= 1)) {
+      return false;
+    }
+  }
+  
+  if (piece === 'p') {
+    if (!(Math.abs(oldY - newY) <= 1)) {
+      return false;
+    }
+  }
 
   if (piece === 'rc' || piece === 'bc') {
     //can only move horizontally and veritcally
@@ -204,6 +256,10 @@ function movePiece(oldX, oldY, newX, newY) {
     //can only move horizontally and veritcally
     if (!(oldX === newX || oldY === newY)) {
       return false;
+    }
+    //if one piece is in the way, the cannnon can capture the piece behind it
+    else if (OneBlocking && newX !==0 && newY !== 0) {
+      return true;
     }
 
     //checks for pieces blocking path
@@ -247,6 +303,22 @@ function clearPath(oldX, oldY, newX, newY) {
     }
   }
   return true;
+}
+
+function OneBlocking() {
+  //checks for a piece blocking its way
+
+  //vertical movements
+  if (oldX === newX) {
+    let step = newY > oldY ? 1 : -1;
+    for (let y = oldY + step; y !== newY; y += step) {
+      if (board[y][oldX] !== 0) {
+        return false;
+      }
+    }
+  }
+
+
 }
 
 function sameTeam(piece1, piece2) {

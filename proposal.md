@@ -10,12 +10,13 @@ I am planning on building a computer version of chinese chess
 - horse and elephants blocking rule
 - highlights possible moves and possible captures
 - highlights kings square when in check
+- sound effects for capturing pieces
 
 
 ## Nice To Have List
 - after a player moves, the board will rotate 180 degrees
+- all time record. Record red wins vs black wins
 - displaying the captured pieces on the side
-- sound effects for capturing pieces
 - different texture packs
 
 
