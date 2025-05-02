@@ -182,7 +182,24 @@ function mousePressed() {
   if (x >= 0 && x < cols && y >= 0 && y < rows) {
     let clickedPiece = board[y][x];
 
-    if (pieceSelected) {
+    if (pieceSelected === 'rk') {
+      let pieceMoved = moveKing(selectedX, selectedY, x, y);
+      pieceSelected = false;
+
+      //alternate turns if moved and if king wasn't captured
+      if (pieceMoved) {
+        checkForWin();
+        if (state !== "gameOver") {
+          if (state === "redTurn") {
+            state = "blackTurn";
+          }
+          else if (state === "blackTurn") {
+            state = "redTurn";
+          }
+        }
+      }
+    }
+    else if (pieceSelected === 'rc' || pieceSelected === 'c') {
       let pieceMoved = moveKing(selectedX, selectedY, x, y);
       pieceSelected = false;
 
@@ -266,6 +283,35 @@ function moveKing(oldX, oldY, newX, newY) {
 
   //can't capture your own piece
   if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
+    return false;
+  }
+
+  //moves the piece
+  board[newY][newX] = piece;
+  board[oldY][oldX] = 0;
+  return true;
+}
+
+function moveChariot() {
+
+  //moves a piece only if move is legal
+  let piece = board[oldY][oldX];
+  let targetPiece = board[newY][newX];
+
+  if (piece === 'rc' || piece === 'bc') {
+    //can only move horizontally and veritcally
+    if (!(oldX === newX || oldY === newY)) {
+      return false;
+    }
+  }
+
+  //can't capture your own piece
+  if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
+    return false;
+  }
+
+  //checks for pieces blocking path
+  if (!clearPath(oldX, oldY, newX, newY)) {
     return false;
   }
 
