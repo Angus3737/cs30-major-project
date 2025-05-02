@@ -183,7 +183,7 @@ function mousePressed() {
     let clickedPiece = board[y][x];
 
     if (pieceSelected) {
-      let pieceMoved = movePiece(selectedX, selectedY, x, y);
+      let pieceMoved = moveKing(selectedX, selectedY, x, y);
       pieceSelected = false;
 
       //alternate turns if moved and if king wasn't captured
@@ -213,7 +213,45 @@ function mousePressed() {
   }
 }
 
-function movePiece(oldX, oldY, newX, newY) {
+// function movePiece(oldX, oldY, newX, newY) {
+
+//   //moves a piece only if move is legal
+//   let piece = board[oldY][oldX];
+//   let targetPiece = board[newY][newX];
+
+//   //if piece is a king, it can only move 1 square
+//   if (piece === 'rk'|| piece === 'k') {
+//     if (!(Math.abs(oldX - newX) <= 1 && Math.abs(oldY - newY) <= 1)) {
+//       return false;
+//     }
+//   }
+
+//   if (piece === 'rp') {
+//     if (!(Math.abs(oldY - newY) <= 1)) {
+//       return false;
+//     }
+//   }
+  
+//   if (piece === 'p') {
+//     if (!(Math.abs(oldY - newY) <= 1)) {
+//       return false;
+//     }
+//   }
+
+//   if (piece === 'rc' || piece === 'bc') {
+//     //can only move horizontally and veritcally
+//     if (!(oldX === newX || oldY === newY)) {
+//       return false;
+//     }
+
+//     //checks for pieces blocking path
+//     if (!clearPath(oldX, oldY, newX, newY)) {
+//       return false;
+//     }
+
+//   }
+
+function moveKing(oldX, oldY, newX, newY) {
 
   //moves a piece only if move is legal
   let piece = board[oldY][oldX];
@@ -226,53 +264,11 @@ function movePiece(oldX, oldY, newX, newY) {
     }
   }
 
-  if (piece === 'rp') {
-    if (!(Math.abs(oldY - newY) <= 1)) {
-      return false;
-    }
-  }
-  
-  if (piece === 'p') {
-    if (!(Math.abs(oldY - newY) <= 1)) {
-      return false;
-    }
-  }
-
-  if (piece === 'rc' || piece === 'bc') {
-    //can only move horizontally and veritcally
-    if (!(oldX === newX || oldY === newY)) {
-      return false;
-    }
-
-    //checks for pieces blocking path
-    if (!clearPath(oldX, oldY, newX, newY)) {
-      return false;
-    }
-
-  }
-
-
-  if (piece === 'rcan' || piece === 'bcan') {
-    //can only move horizontally and veritcally
-    if (!(oldX === newX || oldY === newY)) {
-      return false;
-    }
-    //if one piece is in the way, the cannnon can capture the piece behind it
-    else if (OneBlocking && newX !==0 && newY !== 0) {
-      return true;
-    }
-
-    //checks for pieces blocking path
-    if (!clearPath(oldX, oldY, newX, newY)) {
-      return false;
-    }
-  }
-
-
   //can't capture your own piece
   if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
     return false;
   }
+
   //moves the piece
   board[newY][newX] = piece;
   board[oldY][oldX] = 0;
@@ -305,21 +301,20 @@ function clearPath(oldX, oldY, newX, newY) {
   return true;
 }
 
-function OneBlocking() {
-  //checks for a piece blocking its way
+// function OneBlocking() {
+//   //checks for a piece blocking its way
 
-  //vertical movements
-  if (oldX === newX) {
-    let step = newY > oldY ? 1 : -1;
-    for (let y = oldY + step; y !== newY; y += step) {
-      if (board[y][oldX] !== 0) {
-        return false;
-      }
-    }
-  }
+//   //vertical movements
+//   if (oldX === newX) {
+//     let step = newY > oldY ? 1 : -1;
+//     for (let y = oldY + step; y !== newY; y += step) {
+//       if (board[y][oldX] !== 0) {
+//         return false;
+//       }
+//     }
+//   }
 
-
-}
+// }
 
 function sameTeam(piece1, piece2) {
 
