@@ -1,16 +1,10 @@
-// Chinese Chess
-// Angus Li
-// April 10, 2025
-//
-// Extra for Experts:
-//- Learned to use ternary operator in clearPath function
-//- Used paint.net to edit the designs of the pieces
-//- Added an html link for instructions
+
 
 const CELL_SIZE = 70;
 let rows = 10;
 let cols = 9;
 let pieceSelected = false;
+let pieceSelectedType = 0;
 let redKing;
 let greenKing;
 let selectedX = -1;
@@ -181,92 +175,51 @@ function mousePressed() {
   let y = Math.floor(mouseY/CELL_SIZE);
   if (x >= 0 && x < cols && y >= 0 && y < rows) {
     let clickedPiece = board[y][x];
+    if (pieceSelected) {
+      let pieceMoved = false;
 
-    if (pieceSelected === 'rk') {
-      let pieceMoved = moveKing(selectedX, selectedY, x, y);
+      if (pieceSelectedType === 'rk' || pieceSelectedType === 'k') {
+        pieceMoved = moveKing(selectedX, selectedY, x, y);
+      }
+      else if (pieceSelectedType === 'rc' || pieceSelectedType === 'c') {
+        pieceMoved = moveChariot(selectedX, selectedY, x, y);
+      }
+
       pieceSelected = false;
 
       //alternate turns if moved and if king wasn't captured
       if (pieceMoved) {
         checkForWin();
         if (state !== "gameOver") {
-          if (state === "redTurn") {
-            state = "blackTurn";
-          }
-          else if (state === "blackTurn") {
-            state = "redTurn";
-          }
+          state = (state === "redTurn") ? "blackTurn" : "redTurn";
         }
       }
-    }
-    else if (pieceSelected === 'rc' || pieceSelected === 'c') {
-      let pieceMoved = moveKing(selectedX, selectedY, x, y);
-      pieceSelected = false;
 
-      //alternate turns if moved and if king wasn't captured
-      if (pieceMoved) {
-        checkForWin();
-        if (state !== "gameOver") {
-          if (state === "redTurn") {
-            state = "blackTurn";
-          }
-          else if (state === "blackTurn") {
-            state = "redTurn";
-          }
-        }
-      }
-    }
-    else if (clickedPiece !== 0) {
-
-      //selects a piece if it's a player's turn
-      if (state === "redTurn" && clickedPiece.startsWith("r") || 
-      state === "blackTurn" && !clickedPiece.startsWith("r")) {
+      else {
+      if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || 
+      (state === "blackTurn" && !clickedPiece.startsWith("r"))) {
         selectedX = x;
         selectedY = y;
         selectedPieceType = clickedPiece;
+        pieceSelectedType = clickedPiece;
         pieceSelected = true;
       }
     }
   }
+
+  else {
+    if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || 
+    (state === "blackTurn" && !clickedPiece.startsWith("r"))) {
+      selectedX = x;
+      selectedY = y;
+      selectedPieceType = clickedPiece;
+      pieceSelectedType = clickedPiece;
+      pieceSelected = true;
+    }
+  }
+}
 }
 
-// function movePiece(oldX, oldY, newX, newY) {
-
-//   //moves a piece only if move is legal
-//   let piece = board[oldY][oldX];
-//   let targetPiece = board[newY][newX];
-
-//   //if piece is a king, it can only move 1 square
-//   if (piece === 'rk'|| piece === 'k') {
-//     if (!(Math.abs(oldX - newX) <= 1 && Math.abs(oldY - newY) <= 1)) {
-//       return false;
-//     }
-//   }
-
-//   if (piece === 'rp') {
-//     if (!(Math.abs(oldY - newY) <= 1)) {
-//       return false;
-//     }
-//   }
-  
-//   if (piece === 'p') {
-//     if (!(Math.abs(oldY - newY) <= 1)) {
-//       return false;
-//     }
-//   }
-
-//   if (piece === 'rc' || piece === 'bc') {
-//     //can only move horizontally and veritcally
-//     if (!(oldX === newX || oldY === newY)) {
-//       return false;
-//     }
-
-//     //checks for pieces blocking path
-//     if (!clearPath(oldX, oldY, newX, newY)) {
-//       return false;
-//     }
-
-//   }
 
 function moveKing(oldX, oldY, newX, newY) {
 
@@ -292,13 +245,13 @@ function moveKing(oldX, oldY, newX, newY) {
   return true;
 }
 
-function moveChariot() {
+function moveChariot(oldX, oldY, newX, newY) {
 
   //moves a piece only if move is legal
   let piece = board[oldY][oldX];
   let targetPiece = board[newY][newX];
 
-  if (piece === 'rc' || piece === 'bc') {
+  if (piece === 'rc' || piece === 'c') {
     //can only move horizontally and veritcally
     if (!(oldX === newX || oldY === newY)) {
       return false;
