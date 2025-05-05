@@ -184,6 +184,9 @@ function mousePressed() {
       else if (pieceSelectedType === 'rc' || pieceSelectedType === 'c') {
         pieceMoved = moveChariot(selectedX, selectedY, x, y);
       }
+      else if (pieceSelectedType === 'rp') {
+        pieceMoved = moveRedPawn(selectedX, selectedY, x, y);
+      }
 
       pieceSelected = false;
 
@@ -191,13 +194,11 @@ function mousePressed() {
       if (pieceMoved) {
         checkForWin();
         if (state !== "gameOver") {
-          state = (state === "redTurn") ? "blackTurn" : "redTurn";
+          state = state === "redTurn" ? "blackTurn" : "redTurn";
         }
       }
 
-      else {
-      if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || 
-      (state === "blackTurn" && !clickedPiece.startsWith("r"))) {
+      else if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || state === "blackTurn" && !clickedPiece.startsWith("r")) {
         selectedX = x;
         selectedY = y;
         selectedPieceType = clickedPiece;
@@ -205,11 +206,10 @@ function mousePressed() {
         pieceSelected = true;
       }
     }
-  }
+    
 
-  else {
-    if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || 
-    (state === "blackTurn" && !clickedPiece.startsWith("r"))) {
+
+    else if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || state === "blackTurn" && !clickedPiece.startsWith("r")) {
       selectedX = x;
       selectedY = y;
       selectedPieceType = clickedPiece;
@@ -217,7 +217,6 @@ function mousePressed() {
       pieceSelected = true;
     }
   }
-}
 }
 
 
@@ -274,6 +273,30 @@ function moveChariot(oldX, oldY, newX, newY) {
   return true;
 }
 
+function moveRedPawn() {
+
+  //moves a piece only if move is legal
+  let piece = board[oldY][oldX];
+  let targetPiece = board[newY][newX];
+
+  //can only move one square
+  if (piece === 'rp') {
+    if (!(Math.abs(oldX - newX) <= 1 && Math.abs(oldY - newY) <= 1)) {
+      return false;
+    }
+  }
+
+  //can't capture your own piece
+  if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
+    return false;
+  }
+
+  //moves the piece
+  board[newY][newX] = piece;
+  board[oldY][oldX] = 0;
+  return true;
+}
+
 function clearPath(oldX, oldY, newX, newY) {
 
   //checks for piece blocking the path for a move
@@ -300,20 +323,7 @@ function clearPath(oldX, oldY, newX, newY) {
   return true;
 }
 
-// function OneBlocking() {
-//   //checks for a piece blocking its way
 
-//   //vertical movements
-//   if (oldX === newX) {
-//     let step = newY > oldY ? 1 : -1;
-//     for (let y = oldY + step; y !== newY; y += step) {
-//       if (board[y][oldX] !== 0) {
-//         return false;
-//       }
-//     }
-//   }
-
-// }
 
 function sameTeam(piece1, piece2) {
 
