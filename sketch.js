@@ -187,6 +187,12 @@ function mousePressed() {
       else if (pieceSelectedType === 'rp') {
         pieceMoved = moveRedPawn(selectedX, selectedY, x, y);
       }
+      else if (pieceSelectedType === 'p') {
+        pieceMoved = moveBlackPawn(selectedX, selectedY, x, y);
+      }
+      else if (pieceSelectedType === 'rcan' || pieceSelectedType === 'can') {
+        pieceMoved = moveCannon(selectedX, selectedY, x, y);
+      }
 
       pieceSelected = false;
 
@@ -227,11 +233,10 @@ function moveKing(oldX, oldY, newX, newY) {
   let targetPiece = board[newY][newX];
 
   //if piece is a king, it can only move 1 square
-  if (piece === 'rk'|| piece === 'k') {
-    if (!(Math.abs(oldX - newX) <= 1 && Math.abs(oldY - newY) <= 1)) {
-      return false;
-    }
+  if (!(Math.abs(oldX - newX) <= 1 && Math.abs(oldY - newY) <= 1)) {
+    return false;
   }
+  
 
   //can't capture your own piece
   if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
@@ -250,11 +255,9 @@ function moveChariot(oldX, oldY, newX, newY) {
   let piece = board[oldY][oldX];
   let targetPiece = board[newY][newX];
 
-  if (piece === 'rc' || piece === 'c') {
-    //can only move horizontally and veritcally
-    if (!(oldX === newX || oldY === newY)) {
-      return false;
-    }
+  //can only move horizontally and veritcally
+  if (!(oldX === newX || oldY === newY)) {
+    return false;
   }
 
   //can't capture your own piece
@@ -280,13 +283,11 @@ function moveRedPawn(oldX, oldY, newX, newY) {
   let targetPiece = board[newY][newX];
 
   //check if the pawn is past the halfway point
-  let hasCrossedRiver = oldY < 5
+  let hasCrossedRiver = oldY < 5;
 
-  //can only move one square
-  if (piece === 'rp') {
-    if (Math.abs(oldX - newX) + Math.abs(oldY - newY) !== 1) {
-      return false;
-    }
+  //can only move one square forward
+  if (Math.abs(oldX - newX) + Math.abs(oldY - newY) !== 1) {
+    return false;
   }
 
   //before crossing the river
@@ -303,6 +304,59 @@ function moveRedPawn(oldX, oldY, newX, newY) {
   board[newY][newX] = piece;
   board[oldY][oldX] = 0;
   return true;
+}
+
+function moveBlackPawn(oldX, oldY, newX, newY) {
+
+  //moves a piece only if move is legal
+  let piece = board[oldY][oldX];
+  let targetPiece = board[newY][newX];
+
+  //check if the pawn is past the halfway point
+  let hasCrossedRiver = oldY >= 5;
+
+  //can only move one square forward
+  if (Math.abs(oldX - newX) + Math.abs(newY - oldY) !== 1) {
+    return false;
+  }
+
+  //before crossing the river
+  if (!hasCrossedRiver && newY <= oldY) {
+    return false;
+  }
+
+  //can't capture your own piece
+  if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
+    return false;
+  }
+
+  //moves the piece
+  board[newY][newX] = piece;
+  board[oldY][oldX] = 0;
+  return true;
+}
+
+function moveCannon(oldX, oldY, newX, newY) {
+
+  //moves a piece only if move is legal
+  let piece = board[oldY][oldX];
+  let targetPiece = board[newY][newX];
+
+  //can only move horizontally and veritcally
+  if (!(oldX === newX || oldY === newY)) {
+    return false;
+  }
+
+  //can't capture your own piece
+  if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
+    return false;
+  }
+
+  //moves the piece
+  board[newY][newX] = piece;
+  board[oldY][oldX] = 0;
+  return true;
+
 }
 
 function clearPath(oldX, oldY, newX, newY) {
@@ -329,6 +383,34 @@ function clearPath(oldX, oldY, newX, newY) {
     }
   }
   return true;
+}
+
+function clearVertical(oldX, oldY, newX, newY) {
+
+  //checks for piece blocking the vertical path for a move
+  if (oldX === newX) {
+    let step = newY > oldY ? 1 : -1;
+    for (let y = oldY + step; y !== newY; y += step) {
+      if (board[y][oldX] !== 0) {
+        return false;
+      }
+    }
+  }
+}
+
+function clearHorizontal() {
+
+  //checks for piece blocking the horizontal path for a move
+  if (oldY === newY) {
+    let step = newX > oldX ? 1 : -1;
+    for (let x = oldX + step; x !== newX; x += step) {
+      if (board[oldY][x] !== 0) {
+        return false;
+      }
+    }
+  }
+  return true;
+
 }
 
 
