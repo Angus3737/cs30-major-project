@@ -273,17 +273,25 @@ function moveChariot(oldX, oldY, newX, newY) {
   return true;
 }
 
-function moveRedPawn() {
+function moveRedPawn(oldX, oldY, newX, newY) {
 
   //moves a piece only if move is legal
   let piece = board[oldY][oldX];
   let targetPiece = board[newY][newX];
 
+  //check if the pawn is past the halfway point
+  let hasCrossedRiver = oldY < 5
+
   //can only move one square
   if (piece === 'rp') {
-    if (!(Math.abs(oldX - newX) <= 1 && Math.abs(oldY - newY) <= 1)) {
+    if (Math.abs(oldX - newX) + Math.abs(oldY - newY) !== 1) {
       return false;
     }
+  }
+
+  //before crossing the river
+  if (!hasCrossedRiver && newY >= oldY) {
+    return false;
   }
 
   //can't capture your own piece
