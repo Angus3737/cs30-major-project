@@ -193,6 +193,9 @@ function mousePressed() {
       else if (pieceSelectedType === 'rcan' || pieceSelectedType === 'can') {
         pieceMoved = moveCannon(selectedX, selectedY, x, y);
       }
+      else if (pieceSelectedType === 'rh' || pieceSelectedType === 'h') {
+        pieceMoved = moveHorse(selectedX, selectedY, x, y);
+      }
 
       pieceSelected = false;
 
@@ -237,6 +240,23 @@ function moveKing(oldX, oldY, newX, newY) {
     return false;
   }
   
+  //the king cannot escape his castle
+  //horizontally
+  if (newX < 3 || newX > 5) {
+    return false;
+  }
+
+  //vertically
+  if (pieceSelectedType === 'rk') {
+    if (newY < 7) {
+      return false;
+    }
+  }
+  if (pieceSelectedType === 'k') {
+    if (newY > 2) {
+      return false;
+    }
+  }
 
   //can't capture your own piece
   if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
@@ -344,6 +364,29 @@ function moveCannon(oldX, oldY, newX, newY) {
 
   //can only move horizontally and veritcally
   if (!(oldX === newX || oldY === newY)) {
+    return false;
+  }
+
+  //can't capture your own piece
+  if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
+    return false;
+  }
+
+  //moves the piece
+  board[newY][newX] = piece;
+  board[oldY][oldX] = 0;
+  return true;
+
+}
+
+function moveHorse(oldX, oldY, newX, newY) {
+
+  //moves a piece only if move is legal
+  let piece = board[oldY][oldX];
+  let targetPiece = board[newY][newX];
+
+  //can only move one square forward
+  if (Math.abs(oldX - newX) !== 1 && Math.abs(oldY - newY) !== 2) {
     return false;
   }
 
