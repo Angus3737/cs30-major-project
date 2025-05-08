@@ -99,7 +99,7 @@ function displayGrid() {
 function displayRiver() {
   //draws river just for the background
   for (let x = 0; x < cols; x++) {
-    image(water, x * CELL_SIZE, 4 * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+    image(water, x * CELL_SIZE, 4 * CELL_SIZE + 35, CELL_SIZE, CELL_SIZE);
   }
 }
 
@@ -194,6 +194,9 @@ function mousePressed() {
         pieceMoved = moveCannon(selectedX, selectedY, x, y);
       }
       else if (pieceSelectedType === 'rh' || pieceSelectedType === 'h') {
+        pieceMoved = moveHorse(selectedX, selectedY, x, y);
+      }
+      else if (pieceSelectedType === 'rg' || pieceSelectedType === 'g') {
         pieceMoved = moveHorse(selectedX, selectedY, x, y);
       }
 
@@ -401,6 +404,47 @@ function moveHorse(oldX, oldY, newX, newY) {
   return true;
 
 }
+
+function moveGuard() {
+
+  //moves a piece only if move is legal
+  let piece = board[oldY][oldX];
+  let targetPiece = board[newY][newX];
+ 
+  //the guard can only move one diagonal square
+  if (oldX - newX !== -1 && Math.abs(oldY - newY) !== 1) {
+    return false;
+  }
+   
+  //the guards cannot escape the kings castle castle
+  //horizontally
+  if (newX < 3 || newX > 5) {
+    return false;
+  }
+ 
+  //vertically
+  if (pieceSelectedType === 'rg') {
+    if (newY < 7) {
+      return false;
+    }
+  }
+  if (pieceSelectedType === 'g') {
+    if (newY > 2) {
+      return false;
+    }
+  }
+ 
+  //can't capture your own piece
+  if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
+    return false;
+  }
+ 
+  //moves the piece
+  board[newY][newX] = piece;
+  board[oldY][oldX] = 0;
+  return true;
+}
+
 
 function clearPath(oldX, oldY, newX, newY) {
 
