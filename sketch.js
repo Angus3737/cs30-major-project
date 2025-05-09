@@ -51,6 +51,9 @@ function preload() {
   blackGuard = loadImage("blackguard.png");
 
   water = loadImage("blue-water.avif");
+
+  //load sound effects
+  audioMove = createAudio("movementsound.mp3");
 }
 
 function setup() {
@@ -205,6 +208,7 @@ function mousePressed() {
       //alternate turns if moved and if king wasn't captured
       if (pieceMoved) {
         checkForWin();
+        audioMove.play();
         if (state !== "gameOver") {
           state = state === "redTurn" ? "blackTurn" : "redTurn";
         }
