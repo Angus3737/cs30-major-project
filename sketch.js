@@ -200,7 +200,7 @@ function mousePressed() {
         pieceMoved = moveHorse(selectedX, selectedY, x, y);
       }
       else if (pieceSelectedType === 'rg' || pieceSelectedType === 'g') {
-        pieceMoved = moveHorse(selectedX, selectedY, x, y);
+        pieceMoved = moveGuard(selectedX, selectedY, x, y);
       }
 
       pieceSelected = false;
@@ -213,6 +213,13 @@ function mousePressed() {
           state = state === "redTurn" ? "blackTurn" : "redTurn";
         }
       }
+        else {
+          selectedX = -1;
+          selectedY = -1;
+          selectedPieceType = 0;
+          pieceSelectedType = 0;
+        }
+     }
 
       else if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || state === "blackTurn" && !clickedPiece.startsWith("r")) {
         selectedX = x;
@@ -222,17 +229,6 @@ function mousePressed() {
         pieceSelected = true;
       }
     }
-    
-
-
-    else if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || state === "blackTurn" && !clickedPiece.startsWith("r")) {
-      selectedX = x;
-      selectedY = y;
-      selectedPieceType = clickedPiece;
-      pieceSelectedType = clickedPiece;
-      pieceSelected = true;
-    }
-  }
 }
 
 
@@ -393,7 +389,9 @@ function moveHorse(oldX, oldY, newX, newY) {
   let targetPiece = board[newY][newX];
 
   //can only move one square forward
-  if (Math.abs(oldX - newX) !== 1 && Math.abs(oldY - newY) !== 2) {
+  if ((Math.abs(newX - oldX) === 1 && Math.abs(oldY - newY) === 2) || (Math.abs(newX - oldX) === 2 && Math.abs(oldY - newY) === 1)) {
+  }
+  else {
     return false;
   }
 
@@ -409,14 +407,14 @@ function moveHorse(oldX, oldY, newX, newY) {
 
 }
 
-function moveGuard() {
+function moveGuard(oldX, oldY, newX, newY) {
 
   //moves a piece only if move is legal
   let piece = board[oldY][oldX];
   let targetPiece = board[newY][newX];
  
   //the guard can only move one diagonal square
-  if (oldX - newX !== -1 && Math.abs(oldY - newY) !== 1) {
+  if (Math.abs(oldX - newX) !== 1 || Math.abs(oldY - newY) !== 1) {
     return false;
   }
    
