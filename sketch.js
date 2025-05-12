@@ -441,12 +441,24 @@ function moveElephant(oldX, oldY, newX, newY) {
   let legY;
 
   if (newX - oldX === 2 && newY - oldY === -2) {
+    //north east
+    legX = oldX + 1;
+    legY = oldY - 1;
+  }
+  else if (newX - oldX === -2 && newY - oldY === -2) {
+    //north west
+    legX = oldX - 1;
+    legY = oldY - 1;
+  }
+  else if (newX - oldX === 2 && newY - oldY === 2) {
+    //south east
     legX = oldX + 1;
     legY = oldY + 1;
   }
-  else {
-    legX = oldX;
-    legY = oldY + (newY - oldY) / 2;
+  else if (newX - oldX === -2 && newY - oldY === 2) {
+    //south west
+    legX = oldX - 1;
+    legY = oldY + 1;
   }
 
   if (board[legY][legX] !== 0) {
