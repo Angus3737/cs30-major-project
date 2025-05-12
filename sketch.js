@@ -389,9 +389,24 @@ function moveHorse(oldX, oldY, newX, newY) {
   let targetPiece = board[newY][newX];
 
   //can only move one square forward
-  if ((Math.abs(newX - oldX) === 1 && Math.abs(oldY - newY) === 2) || (Math.abs(newX - oldX) === 2 && Math.abs(oldY - newY) === 1)) {
+  if (!((Math.abs(newX - oldX) === 1 && Math.abs(oldY - newY) === 2) || (Math.abs(newX - oldX) === 2 && Math.abs(oldY - newY) === 1))) {
+    return false;
+  }
+
+  //check for the blocking(leg) square
+  let legX;
+  let legY;
+
+  if (Math.abs(newX - oldX) === 2 && Math.abs(newY - oldY) === 1) {
+    legX = oldX + (newX - oldX) / 2;
+    legY = oldY;
   }
   else {
+    legX = oldX;
+    legY = oldY + (newY - oldY) / 2;
+  }
+
+  if (board[legY][legX] !== 0) {
     return false;
   }
 
