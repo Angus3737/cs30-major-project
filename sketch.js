@@ -202,6 +202,9 @@ function mousePressed() {
       else if (pieceSelectedType === 'rg' || pieceSelectedType === 'g') {
         pieceMoved = moveGuard(selectedX, selectedY, x, y);
       }
+      else if (pieceSelectedType === 're' || pieceSelectedType === 'e') {
+        pieceMoved = moveElephant(selectedX, selectedY, x, y);
+      }
 
       pieceSelected = false;
 
@@ -213,22 +216,22 @@ function mousePressed() {
           state = state === "redTurn" ? "blackTurn" : "redTurn";
         }
       }
-        else {
-          selectedX = -1;
-          selectedY = -1;
-          selectedPieceType = 0;
-          pieceSelectedType = 0;
-        }
-     }
-
-      else if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || state === "blackTurn" && !clickedPiece.startsWith("r")) {
-        selectedX = x;
-        selectedY = y;
-        selectedPieceType = clickedPiece;
-        pieceSelectedType = clickedPiece;
-        pieceSelected = true;
+      else {
+        selectedX = -1;
+        selectedY = -1;
+        selectedPieceType = 0;
+        pieceSelectedType = 0;
       }
     }
+
+    else if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || state === "blackTurn" && !clickedPiece.startsWith("r")) {
+      selectedX = x;
+      selectedY = y;
+      selectedPieceType = clickedPiece;
+      pieceSelectedType = clickedPiece;
+      pieceSelected = true;
+    }
+  }
 }
 
 
@@ -389,7 +392,7 @@ function moveHorse(oldX, oldY, newX, newY) {
   let targetPiece = board[newY][newX];
 
   //can only move one square forward
-  if (!((Math.abs(newX - oldX) === 1 && Math.abs(oldY - newY) === 2) || (Math.abs(newX - oldX) === 2 && Math.abs(oldY - newY) === 1))) {
+  if (!(Math.abs(newX - oldX) === 1 && Math.abs(oldY - newY) === 2 || Math.abs(newX - oldX) === 2 && Math.abs(oldY - newY) === 1)) {
     return false;
   }
 
@@ -400,6 +403,46 @@ function moveHorse(oldX, oldY, newX, newY) {
   if (Math.abs(newX - oldX) === 2 && Math.abs(newY - oldY) === 1) {
     legX = oldX + (newX - oldX) / 2;
     legY = oldY;
+  }
+  else {
+    legX = oldX;
+    legY = oldY + (newY - oldY) / 2;
+  }
+
+  if (board[legY][legX] !== 0) {
+    return false;
+  }
+
+  //can't capture your own piece
+  if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
+    return false;
+  }
+
+  //moves the piece
+  board[newY][newX] = piece;
+  board[oldY][oldX] = 0;
+  return true;
+
+}
+
+function moveElephant(oldX, oldY, newX, newY) {
+
+  //moves a piece only if move is legal
+  let piece = board[oldY][oldX];
+  let targetPiece = board[newY][newX];
+
+  //can only move one square forward
+  if (!(Math.abs(newX - oldX) === 2 && Math.abs(oldY - newY) === 2 )) {
+    return false;
+  }
+
+  //check for the blocking(leg) square
+  let legX;
+  let legY;
+
+  if (newX - oldX === 2 && newY - oldY === -2) {
+    legX = oldX + 1;
+    legY = oldY + 1;
   }
   else {
     legX = oldX;
