@@ -61,14 +61,7 @@ function setup() {
 
   //creates link to "how to play"
   let link = createA('https://www.ymimports.com/pages/how-to-play-xiangqi-chinese-chess', 'How to Play');
-  link.position(-200, 200);
-
-  //more info in my version
-  p = createP('The chariots move the same as rooks');
-  p.position(-400, 0);
-
-  p1 = createP('In this version, the river is just for design');
-  p1.position(-400, 50);
+  link.position(-350, 100);
 }
 
 function draw() {
@@ -268,6 +261,16 @@ function moveKing(oldX, oldY, newX, newY) {
   if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
     return false;
   }
+
+  //can't face the other king
+  if (pieceSelectedType === 'rk') {
+    for (let yValue = 0; yValue < 10; yValue++)
+      if (board[yValue][x] = "k") {
+        return false
+      }
+    }
+  }
+
 
   //moves the piece
   board[newY][newX] = piece;
