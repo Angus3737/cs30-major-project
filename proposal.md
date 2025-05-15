@@ -18,5 +18,6 @@ I am planning on building a computer version of chinese chess
 - all time record. Record red wins vs black wins
 - displaying the captured pieces on the side
 - different texture packs
+- have reminders for special rules pop up on the screen
 
 

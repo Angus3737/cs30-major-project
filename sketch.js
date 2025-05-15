@@ -1,4 +1,6 @@
-
+//Compsci 30 Major Project
+//Angus Li
+//Chinese Chess
 
 const CELL_SIZE = 70;
 let rows = 10;
@@ -264,9 +266,9 @@ function moveKing(oldX, oldY, newX, newY) {
 
   //can't face the other king
   if (pieceSelectedType === 'rk') {
-    for (let yValue = 0; yValue < 10; yValue++)
+    for (let yValue = 0; yValue < 10; yValue++) {
       if (board[yValue][x] = "k") {
-        return false
+        return false;
       }
     }
   }
@@ -399,15 +401,17 @@ function moveHorse(oldX, oldY, newX, newY) {
     return false;
   }
 
-  //check for the blocking(leg) square
+  //check for the blocking square, called the leg
   let legX;
   let legY;
 
   if (Math.abs(newX - oldX) === 2 && Math.abs(newY - oldY) === 1) {
+    //east and west
     legX = oldX + (newX - oldX) / 2;
     legY = oldY;
   }
   else {
+    //north and south
     legX = oldX;
     legY = oldY + (newY - oldY) / 2;
   }
@@ -439,7 +443,7 @@ function moveElephant(oldX, oldY, newX, newY) {
     return false;
   }
 
-  //check for the blocking(leg) square
+  //check for the blocking square, called the leg
   let legX;
   let legY;
 
@@ -468,6 +472,18 @@ function moveElephant(oldX, oldY, newX, newY) {
     return false;
   }
 
+  //the elephant is too big to cross the river
+  if (pieceSelectedType === 're') {
+    if (newY < 5) {
+      return false;
+    }
+  }
+  if (pieceSelectedType === 'e') {
+    if (newY > 5) {
+      return false;
+    }
+  }
+
   //can't capture your own piece
   if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
     return false;
@@ -477,7 +493,6 @@ function moveElephant(oldX, oldY, newX, newY) {
   board[newY][newX] = piece;
   board[oldY][oldX] = 0;
   return true;
-
 }
 
 function moveGuard(oldX, oldY, newX, newY) {
