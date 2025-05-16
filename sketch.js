@@ -14,7 +14,8 @@ let selectedY = -1;
 let selectedPieceType = 0;
 let state = "redTurn";
 let winner;
-let cannonCapture;
+let redScore = 49;
+let blackScore = 20;
 
 let board = [
   ['c', 'h', 'e', 'g', 'k', 'g', 'e', 'h', 'c'],
@@ -81,6 +82,8 @@ function draw() {
   displayGrid();
   displayRiver();
   displayPieces();
+  displayRedScore();
+  displayBlackScore();
 }
 
 function displayGrid() {
@@ -98,6 +101,28 @@ function displayRiver() {
   //draws river just for the background
   for (let x = 0; x < cols; x++) {
     image(water, x * CELL_SIZE, 4 * CELL_SIZE + 35, CELL_SIZE, CELL_SIZE);
+  }
+}
+
+function displayRedScore() {
+  if(redScore - blackScore >= 0) {
+    fill("black");
+    text("score: +" + (redScore - blackScore), 500, 500);
+
+  }
+  else {
+    fill("black");
+    text("score: -" + (redScore - blackScore), 500, 500);
+  }
+}
+function displayBlackScore() {
+  if (blackScore - redScore >= 0) {
+    fill("black");
+    text("score: +" + (blackScore - redScore), 500, 200);
+  }
+  else {
+    fill("black");
+    text("score: -" + (blackScore - redScore), 500, 200);
   }
 }
 

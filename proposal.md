@@ -20,4 +20,3 @@ I am planning on building a computer version of chinese chess
 - different texture packs
 - have reminders for special rules pop up on the screen
 
-
