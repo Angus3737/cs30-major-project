@@ -265,14 +265,34 @@ function moveKing(oldX, oldY, newX, newY) {
   }
 
   //can't face the other king
-  if (pieceSelectedType === 'rk') {
-    for (let yValue = 0; yValue < 10; yValue++) {
-      if (board[yValue][x] = "k") {
-        return false;
-      }
+  let enemyKing = 'k';
+  if (piece === 'k') {
+    enemyKing = 'rk';
+  }
+
+  //look up and down the new collumn from newY, where the king will move
+  let otherKingY = -1;
+  for (let y = 0; y < rows; y++) {
+    if (board[y][newX] === enemyKing) {
+      otherKingY = y;
+      break;
     }
   }
 
+  if (otherKingY !== -1) {
+    let minY = (newY, otherKingY);
+    let maxY = (newY, otherKingY);
+    let inBetween = 0;
+    for(let y = minY + 1; y < maxY; y++) {
+      if (board[y][newX] !== 0) {
+        inBetween++;
+      }
+    }
+
+  if (inBetween === 0) {
+    return false;
+  }
+}
 
   //moves the piece
   board[newY][newX] = piece;
@@ -378,16 +398,42 @@ function moveCannon(oldX, oldY, newX, newY) {
     return false;
   }
 
-  //can't capture your own piece
-  if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
-    return false;
+  //counts number of pieces between original spot and destination
+  let count = 0;
+
+  if (oldX === newX) {
+    //vertically counting
+    let minY = Math.min(oldY, newY);
+    let maxY = Math.max(oldY, newY);
+    for (let y = minY + 1; y < maxY; y++) {
+      if (board[y][oldX] !==0) {
+        count++;
+      }
+    }
   }
+  else {
+    //horizontally
+    let minX = Math.min(oldX, newX);
+    let maxX = Math.max(oldX, newX);
+    for (let x = minX + 1; x < maxX; x++) {
+    if (board[oldY][x] !==0) {
+      count++;
+    }
+  }
+}
 
-  //moves the piece
-  board[newY][newX] = piece;
-  board[oldY][oldX] = 0;
-  return true;
-
+  if (targetPiece === 0) {
+    if (count === 0) {
+      board[newY][newX] = piece;
+      board[oldY][oldX] = 0;
+      return true;
+    }
+  }
+    else if (!sameTeam(piece, targetPiece) && count === 1) {
+      board[newY][newX] = piece;
+      board[oldY][oldX] = 0;
+      return true;
+    }
 }
 
 function moveHorse(oldX, oldY, newX, newY) {
