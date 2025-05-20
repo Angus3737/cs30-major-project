@@ -441,11 +441,11 @@ function moveCannon(oldX, oldY, newX, newY) {
     let minX = Math.min(oldX, newX);
     let maxX = Math.max(oldX, newX);
     for (let x = minX + 1; x < maxX; x++) {
-    if (board[oldY][x] !==0) {
-      count++;
+      if (board[oldY][x] !==0) {
+        count++;
+      }
     }
   }
-}
 
   if (targetPiece === 0) {
     if (count === 0) {
@@ -454,11 +454,11 @@ function moveCannon(oldX, oldY, newX, newY) {
       return true;
     }
   }
-    else if (!sameTeam(piece, targetPiece) && count === 1) {
-      board[newY][newX] = piece;
-      board[oldY][oldX] = 0;
-      return true;
-    }
+  else if (!sameTeam(piece, targetPiece) && count === 1) {
+    board[newY][newX] = piece;
+    board[oldY][oldX] = 0;
+    return true;
+  }
 }
 
 function moveHorse(oldX, oldY, newX, newY) {
