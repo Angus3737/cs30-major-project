@@ -16,6 +16,8 @@ let state = "redTurn";
 let winner;
 let redScore = 49;
 let blackScore = 20;
+let newRedScore;
+let newBlackScore;
 
 let board = [
   ['c', 'h', 'e', 'g', 'k', 'g', 'e', 'h', 'c'],
@@ -65,6 +67,11 @@ function setup() {
   //creates link to "how to play"
   let link = createA('https://www.ymimports.com/pages/how-to-play-xiangqi-chinese-chess', 'How to Play');
   link.position(-350, 100);
+
+  let displayRedScore = createP(newRedScore);
+  displayRedScore.position(700, 500);
+  let displayBlackScore = createP(newBlackScore);
+  displayBlackScore.position(700, - 500);
 }
 
 function draw() {
@@ -106,23 +113,19 @@ function displayRiver() {
 
 function displayRedScore() {
   if(redScore - blackScore >= 0) {
-    fill("black");
-    text("score: +" + (redScore - blackScore), 500, 500);
+    nfewRedScore = "score: +" + (redScore - blackScore);
 
   }
   else {
-    fill("black");
-    text("score: -" + (redScore - blackScore), 500, 500);
+    newRedScore = "score: -" + (redScore - blackScore);
   }
 }
 function displayBlackScore() {
   if (blackScore - redScore >= 0) {
-    fill("black");
-    text("score: +" + (blackScore - redScore), 500, 200);
+    newBlackScore = "score: +" + (blackScore - redScore);
   }
   else {
-    fill("black");
-    text("score: -" + (blackScore - redScore), 500, 200);
+    newBlackScore = "score: -" + (blackScore - redScore);
   }
 }
 
