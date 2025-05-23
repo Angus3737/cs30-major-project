@@ -18,6 +18,7 @@ let redScore = 49;
 let blackScore = 20;
 let newRedScore;
 let newBlackScore;
+let theFireworks = [];
 
 let board = [
   ['c', 'h', 'e', 'g', 'k', 'g', 'e', 'h', 'c'],
@@ -113,7 +114,7 @@ function displayRiver() {
 
 function displayRedScore() {
   if(redScore - blackScore >= 0) {
-    nfewRedScore = "score: +" + (redScore - blackScore);
+    newRedScore = "score: +" + (redScore - blackScore);
 
   }
   else {
@@ -317,10 +318,10 @@ function moveKing(oldX, oldY, newX, newY) {
       }
     }
 
-  if (inBetween === 0) {
-    return false;
+    if (inBetween === 0) {
+      return false;
+    }
   }
-}
 
   //moves the piece
   board[newY][newX] = piece;
@@ -609,6 +610,61 @@ function moveGuard(oldX, oldY, newX, newY) {
   return true;
 }
 
+class Particle {
+  //creating firework
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.dx = random(-5, 5);
+    this.dy = random(-5, 5);
+    this.radius = 2;
+    this.r = 255;
+    this.g = 0;
+    this.b = 0;
+    this.opacity = 255;
+  }
+
+  display() {
+    noStroke();
+    fill(this.r, this.g, this.b, this.opacity);
+    circle(this.x, this.y, this.radius*2);
+  }
+
+  update() {
+    //move
+    this.x += this.dx;
+    this.y += this.dy;
+
+    //fade away over time
+    this.opacity--;
+  }
+
+  isDead() {
+    return this.opacity <= 0;
+  }
+}
+
+
+function createFireworks() {
+
+  for (let firework of theFireworks) {
+    if (firework.isDead()) {
+      //get rid of it
+      let index = theFireworks.indexOf(firework);
+      theFireworks.splice(index, 1);
+    }
+    else {
+      firework.update();
+      firework.display();
+    }
+  }
+  
+  for (let i = 0; i < 150; i++) {
+    let someFirework = new Particle(0, 0);
+    theFireworks.push(someFirework);
+  }
+}
+
 
 function clearPath(oldX, oldY, newX, newY) {
 
@@ -633,7 +689,9 @@ function clearPath(oldX, oldY, newX, newY) {
       }
     }
   }
-  return true;
+  else {
+    return true;
+  }
 }
 
 function clearVertical(oldX, oldY, newX, newY) {
@@ -660,7 +718,9 @@ function clearHorizontal() {
       }
     }
   }
-  return true;
+  else {
+    return true;
+  }
 
 }
 
@@ -675,7 +735,9 @@ function sameTeam(piece1, piece2) {
   if (!piece1.startsWith('r') && !piece2.startsWith('r')) {
     return true;
   }
-  return false;
+  else {
+    return false;
+  }
 }
 
 function checkForWin() {
@@ -698,10 +760,12 @@ function checkForWin() {
   if (!redKingAlive) {
     state = "gameOver";
     winner = "Black Wins!!!";
+    createFireworks();
   }
 
   else if (!blackKingAlive) {
     state = "gameOver";
     winner = "Red Wins!!!";
+    createFireworks();
   }
 }
