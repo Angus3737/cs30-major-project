@@ -14,11 +14,17 @@ let selectedY = -1;
 let selectedPieceType = 0;
 let state = "redTurn";
 let winner;
-let redScore = 49;
-let blackScore = 20;
-let newRedScore;
-let newBlackScore;
-let theFireworks = [];
+let redScore;
+let blackScore;
+let startingScore = 49;
+let pawnValue = 1;
+let chariotValue = 9;
+let horseValue = 4;
+let cannonValue = 4.5;
+let guardValue = 2;
+let elephantValue = 2.5;
+
+
 
 let board = [
   ['c', 'h', 'e', 'g', 'k', 'g', 'e', 'h', 'c'],
@@ -69,10 +75,6 @@ function setup() {
   let link = createA('https://www.ymimports.com/pages/how-to-play-xiangqi-chinese-chess', 'How to Play');
   link.position(-350, 100);
 
-  let displayRedScore = createP(newRedScore);
-  displayRedScore.position(700, 500);
-  let displayBlackScore = createP(newBlackScore);
-  displayBlackScore.position(700, - 500);
 }
 
 function draw() {
@@ -81,11 +83,11 @@ function draw() {
   //show "game over" message after someone wins with fireworks
   if (state === "gameOver") {
 
-  textAlign(CENTER, CENTER);
-  textSize(32);
-  fill("black");
-  text(winner, width / 2, height / 2);
-  return;
+    textAlign(CENTER, CENTER);
+    textSize(32);
+    fill("black");
+    text(winner, width / 2, height / 2);
+    return;
   }
 
   displayGrid();
@@ -113,22 +115,75 @@ function displayRiver() {
   }
 }
 
-function displayRedScore() {
-  if(redScore - blackScore >= 0) {
-    newRedScore = "score: +" + (redScore - blackScore);
+function calculateRedScore() {
+  let rpCount = 0;
+  let rcanCount = 0;
+  let rcCount = 0;
+  let rhCount = 0;
+  let reCount = 0;
+  let rgCount = 0;
+  for (let x = 0; x < cols; x++) {
+    for (let y = 0; y < rows; y++) {
+      if (board[y][x] === 'rp') {
+        rpCount + 1;
+      }
+      else if (board[y][x] === 'rcan') {
+        rcanCount + 4.5;
+      }
+      else if (board[y][x] === 'rc') {
+        rcCount + 9;
+      }
+      else if (board[y][x] === 'rh') {
+        rhCount + 4;
+      }
+      else if (board[y][x] === 're') {
+        reCount + 2.5;
+      }
+      else if (board[y][x] === 'rg') {
+        rgCount + 2;
+      }
+    }
+  }
+  redScore = rpCount + rcanCount + rcCount + rhCount + reCount + rgCount;
+}
 
+function calculateBlackScore() {
+  let pCount = 0;
+  let canCount = 0;
+  let cCount = 0;
+  let hCount = 0;
+  let eCount = 0;
+  let gCount = 0;
+  for (let x = 0; x < cols; x++) {
+    for (let y = 0; y < rows; y++) {
+      if (board[y][x] === 'rp') {
+        pCount + 1;
+      }
+      else if (board[y][x] === 'rcan') {
+        canCount + 4.5;
+      }
+      else if (board[y][x] === 'rc') {
+        cCount + 9;
+      }
+      else if (board[y][x] === 'rh') {
+        hCount + 4;
+      }
+      else if (board[y][x] === 're') {
+        eCount + 2.5;
+      }
+      else if (board[y][x] === 'rg') {
+        gCount + 2;
+      }
+    }
   }
-  else {
-    newRedScore = "score: -" + (redScore - blackScore);
-  }
+  blackScore = pCount + canCount + cCount + hCount + eCount + gCount;
+}
+
+function displayRedScore() {
+
 }
 function displayBlackScore() {
-  if (blackScore - redScore >= 0) {
-    newBlackScore = "score: +" + (blackScore - redScore);
-  }
-  else {
-    newBlackScore = "score: -" + (blackScore - redScore);
-  }
+
 }
 
 function displayPieces() {
