@@ -78,13 +78,14 @@ function setup() {
 function draw() {
   background(220);
 
-  //show "game over" message after someone wins
+  //show "game over" message after someone wins with fireworks
   if (state === "gameOver") {
-    textAlign(CENTER, CENTER);
-    textSize(32);
-    fill("black");
-    text(winner, width / 2, height / 2);
-    return;
+
+  textAlign(CENTER, CENTER);
+  textSize(32);
+  fill("black");
+  text(winner, width / 2, height / 2);
+  return;
   }
 
   displayGrid();
@@ -235,7 +236,7 @@ function mousePressed() {
       //alternate turns if moved and if king wasn't captured
       if (pieceMoved) {
         checkForWin();
-        audioMove.play();
+        playMoveSound();
         if (state !== "gameOver") {
           state = state === "redTurn" ? "blackTurn" : "redTurn";
         }
@@ -258,6 +259,10 @@ function mousePressed() {
   }
 }
 
+function playMoveSound() {
+  let sound = createAudio("movementsound.mp3");
+  sound.play();
+}
 
 function moveKing(oldX, oldY, newX, newY) {
 
@@ -309,10 +314,10 @@ function moveKing(oldX, oldY, newX, newY) {
   }
 
   if (otherKingY !== -1) {
-    let minY = (newY, otherKingY);
-    let maxY = (newY, otherKingY);
+    let minY = Math.min(newY, otherKingY);
+    let maxY = Math.max(newY, otherKingY);
     let inBetween = 0;
-    for(let y = minY + 1; y < maxY; y++) {
+    for (let y = minY + 1; y < maxY; y++) {
       if (board[y][newX] !== 0) {
         inBetween++;
       }
@@ -610,88 +615,29 @@ function moveGuard(oldX, oldY, newX, newY) {
   return true;
 }
 
-class Particle {
-  //creating firework
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.dx = random(-5, 5);
-    this.dy = random(-5, 5);
-    this.radius = 2;
-    this.r = 255;
-    this.g = 0;
-    this.b = 0;
-    this.opacity = 255;
-  }
-
-  display() {
-    noStroke();
-    fill(this.r, this.g, this.b, this.opacity);
-    circle(this.x, this.y, this.radius*2);
-  }
-
-  update() {
-    //move
-    this.x += this.dx;
-    this.y += this.dy;
-
-    //fade away over time
-    this.opacity--;
-  }
-
-  isDead() {
-    return this.opacity <= 0;
-  }
-}
-
-
-function createFireworks() {
-
-  for (let firework of theFireworks) {
-    if (firework.isDead()) {
-      //get rid of it
-      let index = theFireworks.indexOf(firework);
-      theFireworks.splice(index, 1);
-    }
-    else {
-      firework.update();
-      firework.display();
-    }
-  }
-  
-  for (let i = 0; i < 150; i++) {
-    let someFirework = new Particle(0, 0);
-    theFireworks.push(someFirework);
-  }
-}
-
-
 function clearPath(oldX, oldY, newX, newY) {
 
-  //checks for piece blocking the path for a move
-
-  //vertical movements
+  //check for piece blocking the destination
   if (oldX === newX) {
-    let step = newY > oldY ? 1 : -1;
-    for (let y = oldY + step; y !== newY; y += step) {
+    let minY = Math.min(oldY, newY);
+    let maxY = Math.max(oldY, newY);
+    for (let y = minY + 1; y < maxY; y++) {
       if (board[y][oldX] !== 0) {
         return false;
       }
     }
   }
 
-  //horizontal movements
   else if (oldY === newY) {
-    let step = newX > oldX ? 1 : -1;
-    for (let x = oldX + step; x !== newX; x += step) {
+    let minX = Math.min(oldX, newX);
+    let maxX = Math.max(oldX, newX);
+    for (let x = minX + 1; x < maxX; x++) {
       if (board[oldY][x] !== 0) {
         return false;
       }
     }
   }
-  else {
-    return true;
-  }
+  return true;
 }
 
 function clearVertical(oldX, oldY, newX, newY) {
@@ -760,12 +706,10 @@ function checkForWin() {
   if (!redKingAlive) {
     state = "gameOver";
     winner = "Black Wins!!!";
-    createFireworks();
   }
 
   else if (!blackKingAlive) {
     state = "gameOver";
     winner = "Red Wins!!!";
-    createFireworks();
   }
 }
