@@ -99,11 +99,17 @@ function draw() {
 
 function displayGrid() {
 
-  // draws a grid of 9 x 9
-  fill(247, 219, 167);
+  // draws the board
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
+      fill(247, 219, 167);
       square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
+      
+      //highlights the king's castle
+      if (x > 2 && x < 6 && y < 3 || y > 6 && x > 2 && x < 6) {
+        fill(212, 163, 115);
+        square(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
+      }
     }
   }
 }
@@ -116,35 +122,38 @@ function displayRiver() {
 }
 
 function calculateRedScore() {
-  let rpCount = 0;
-  let rcanCount = 0;
-  let rcCount = 0;
-  let rhCount = 0;
-  let reCount = 0;
-  let rgCount = 0;
+  // let rpCount = 0;
+  // let rcanCount = 0;
+  // let rcCount = 0;
+  // let rhCount = 0;
+  // let reCount = 0;
+  // let rgCount = 0;
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
       if (board[y][x] === 'rp') {
-        rpCount + 1;
+        redScore + 1;
       }
       else if (board[y][x] === 'rcan') {
-        rcanCount + 4.5;
+        redScore + 4.5;
       }
       else if (board[y][x] === 'rc') {
-        rcCount + 9;
+        redScore + 9;
       }
       else if (board[y][x] === 'rh') {
-        rhCount + 4;
+        redScore + 4;
       }
       else if (board[y][x] === 're') {
-        reCount + 2.5;
+        redScore + 2.5;
       }
       else if (board[y][x] === 'rg') {
-        rgCount + 2;
+        redScore + 2;
       }
     }
   }
-  redScore = rpCount + rcanCount + rcCount + rhCount + reCount + rgCount;
+  return redScore;
+  // redScore = rpCount + rcanCount + rcCount + rhCount + reCount + rgCount;
+  console.log("red " + redScore);
+
 }
 
 function calculateBlackScore() {
@@ -177,12 +186,35 @@ function calculateBlackScore() {
     }
   }
   blackScore = pCount + canCount + cCount + hCount + eCount + gCount;
+  console.log(blackScore);
 }
 
 function displayRedScore() {
+  if (redScore > blackScore) {
+    fill("black");
+
+    text("score: +" + (redScore - blackScore), 500, 500);
+
+  }
+  else {
+    fill("black");
+
+    text("score: -" + (redScore - blackScore), 500, 500);
+  }
 
 }
 function displayBlackScore() {
+  // console.log(blackScore);
+  if (blackScore > redScore) {
+    fill("black");
+    text("score: +" + (blackScore - redScore), 500, 50);
+
+  }
+  else {
+    fill("black");
+
+    text("score: -" + (blackScore - redScore), 500, 200);
+  }
 
 }
 
@@ -292,6 +324,8 @@ function mousePressed() {
       if (pieceMoved) {
         checkForWin();
         playMoveSound();
+        calculateBlackScore();
+        calculateRedScore();
         if (state !== "gameOver") {
           state = state === "redTurn" ? "blackTurn" : "redTurn";
         }
