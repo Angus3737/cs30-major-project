@@ -360,7 +360,8 @@ function moveKing(oldX, oldY, newX, newY) {
   let targetPiece = board[newY][newX];
 
   //if piece is a king, it can only move 1 square
-  if (!(Math.abs(oldX - newX) <= 1 && Math.abs(oldY - newY) <= 1)) {
+  if (Math.abs(oldX - newX) === 1 && Math.abs(oldY - newY) !==0 ||
+   Math.abs(oldX - newX) !== 0 && Math.abs(oldY - newY) === 1) {
     return false;
   }
   
@@ -728,38 +729,6 @@ function clearPath(oldX, oldY, newX, newY) {
   }
   return true;
 }
-
-function clearVertical(oldX, oldY, newX, newY) {
-
-  //checks for piece blocking the vertical path for a move
-  if (oldX === newX) {
-    let step = newY > oldY ? 1 : -1;
-    for (let y = oldY + step; y !== newY; y += step) {
-      if (board[y][oldX] !== 0) {
-        return false;
-      }
-    }
-  }
-}
-
-function clearHorizontal() {
-
-  //checks for piece blocking the horizontal path for a move
-  if (oldY === newY) {
-    let step = newX > oldX ? 1 : -1;
-    for (let x = oldX + step; x !== newX; x += step) {
-      if (board[oldY][x] !== 0) {
-        return false;
-      }
-    }
-  }
-  else {
-    return true;
-  }
-
-}
-
-
 
 function sameTeam(piece1, piece2) {
 
