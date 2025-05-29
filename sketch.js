@@ -119,13 +119,16 @@ function displayGrid() {
 }
 
 function displayRiver() {
-  //draws river just for the background
+
+  //draws river across the middle
   for (let x = 0; x < cols; x++) {
     image(water, x * CELL_SIZE, 4 * CELL_SIZE + 35, CELL_SIZE, CELL_SIZE);
   }
 }
 
 function calculateRedScore() {
+
+  //calculates black's score after every capture
   redScore = 0;
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
@@ -149,11 +152,11 @@ function calculateRedScore() {
       }
     }
   }
-  console.log("red " + redScore);
-
 }
 
 function calculateBlackScore() {
+
+  //calculates red's score after every capture
   blackScore = 0;
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
@@ -180,32 +183,31 @@ function calculateBlackScore() {
 }
 
 function displayRedScore() {
+
+  //displays red score
   if (redScore >= blackScore) {
-    fill("black");
-
+    fill("red");
     text("score: +" + (redScore - blackScore), 500, 500);
-
   }
-  else {
-    fill("black");
 
+  else {
+    fill("red");
     text("score: " + (redScore - blackScore), 500, 500);
   }
-
 }
+
 function displayBlackScore() {
-  // console.log(blackScore);
+
+  //displays black score
   if (blackScore >= redScore) {
     fill("black");
     text("score: +" + (blackScore - redScore), 500, 200);
-
   }
+
   else {
     fill("black");
-
     text("score: " + (blackScore - redScore), 500, 200);
   }
-
 }
 
 function displayPieces() {
@@ -339,6 +341,8 @@ function mousePressed() {
 }
 
 function playMoveSound() {
+
+  //creates piece moving sound
   let sound = createAudio("movementsound.mp3");
   sound.play();
 }
@@ -350,8 +354,9 @@ function moveKing(oldX, oldY, newX, newY) {
   let targetPiece = board[newY][newX];
 
   //if piece is a king, it can only move 1 square
-  if (Math.abs(oldX - newX) === 1 && Math.abs(oldY - newY) !==0 ||
-   Math.abs(oldX - newX) !== 0 && Math.abs(oldY - newY) === 1) {
+  if (Math.abs(oldX - newX) === 1 && Math.abs(oldY - newY) === 1 ||
+   Math.abs(oldX - newX) > 1 && Math.abs(oldY - newY) ===0 ||
+   Math.abs(oldX - newX) === 0 && Math.abs(oldY - newY) > 1) {
     return false;
   }
   
