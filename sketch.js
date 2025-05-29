@@ -93,6 +93,10 @@ function draw() {
   displayGrid();
   displayRiver();
   displayPieces();
+
+  calculateRedScore();
+  calculateBlackScore();
+
   displayRedScore();
   displayBlackScore();
 }
@@ -122,75 +126,61 @@ function displayRiver() {
 }
 
 function calculateRedScore() {
-  // let rpCount = 0;
-  // let rcanCount = 0;
-  // let rcCount = 0;
-  // let rhCount = 0;
-  // let reCount = 0;
-  // let rgCount = 0;
+  redScore = 0;
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
       if (board[y][x] === 'rp') {
-        redScore + 1;
+        redScore += 1;
       }
       else if (board[y][x] === 'rcan') {
-        redScore + 4.5;
+        redScore += 4.5;
       }
       else if (board[y][x] === 'rc') {
-        redScore + 9;
+        redScore += 9;
       }
       else if (board[y][x] === 'rh') {
-        redScore + 4;
+        redScore += 4;
       }
       else if (board[y][x] === 're') {
-        redScore + 2.5;
+        redScore += 2.5;
       }
       else if (board[y][x] === 'rg') {
-        redScore + 2;
+        redScore += 2;
       }
     }
   }
-  return redScore;
-  // redScore = rpCount + rcanCount + rcCount + rhCount + reCount + rgCount;
   console.log("red " + redScore);
 
 }
 
 function calculateBlackScore() {
-  let pCount = 0;
-  let canCount = 0;
-  let cCount = 0;
-  let hCount = 0;
-  let eCount = 0;
-  let gCount = 0;
+  blackScore = 0;
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
-      if (board[y][x] === 'rp') {
-        pCount + 1;
+      if (board[y][x] === 'p') {
+        blackScore += 1;
       }
-      else if (board[y][x] === 'rcan') {
-        canCount + 4.5;
+      else if (board[y][x] === 'can') {
+        blackScore += 4.5;
       }
-      else if (board[y][x] === 'rc') {
-        cCount + 9;
+      else if (board[y][x] === 'c') {
+        blackScore += 9;
       }
-      else if (board[y][x] === 'rh') {
-        hCount + 4;
+      else if (board[y][x] === 'h') {
+        blackScore += 4;
       }
-      else if (board[y][x] === 're') {
-        eCount + 2.5;
+      else if (board[y][x] === 'e') {
+        blackScore += 2.5;
       }
-      else if (board[y][x] === 'rg') {
-        gCount + 2;
+      else if (board[y][x] === 'g') {
+        blackScore += 2;
       }
     }
   }
-  blackScore = pCount + canCount + cCount + hCount + eCount + gCount;
-  console.log(blackScore);
 }
 
 function displayRedScore() {
-  if (redScore > blackScore) {
+  if (redScore >= blackScore) {
     fill("black");
 
     text("score: +" + (redScore - blackScore), 500, 500);
@@ -199,21 +189,21 @@ function displayRedScore() {
   else {
     fill("black");
 
-    text("score: -" + (redScore - blackScore), 500, 500);
+    text("score: " + (redScore - blackScore), 500, 500);
   }
 
 }
 function displayBlackScore() {
   // console.log(blackScore);
-  if (blackScore > redScore) {
+  if (blackScore >= redScore) {
     fill("black");
-    text("score: +" + (blackScore - redScore), 500, 50);
+    text("score: +" + (blackScore - redScore), 500, 200);
 
   }
   else {
     fill("black");
 
-    text("score: -" + (blackScore - redScore), 500, 200);
+    text("score: " + (blackScore - redScore), 500, 200);
   }
 
 }
