@@ -23,6 +23,7 @@ let horseValue = 4;
 let cannonValue = 4.5;
 let guardValue = 2;
 let elephantValue = 2.5;
+let redScoreElement;
 
 
 
@@ -75,6 +76,9 @@ function setup() {
   let link = createA('https://www.ymimports.com/pages/how-to-play-xiangqi-chinese-chess', 'How to Play');
   link.position(-350, 100);
 
+  redScoreElement = createP('Score: ');
+  redScoreElement.position(700, 500);
+  redScoreElement.style("color: red;")
 }
 
 function draw() {
@@ -99,6 +103,7 @@ function draw() {
 
   displayRedScore();
   displayBlackScore();
+
 }
 
 function displayGrid() {
@@ -194,6 +199,8 @@ function displayRedScore() {
     fill("red");
     text("score: " + (redScore - blackScore), 500, 500);
   }
+
+  
 }
 
 function displayBlackScore() {
@@ -276,6 +283,8 @@ function displayPieces() {
 }
 
 function mousePressed() {
+
+  redScoreElement.html("did it work?");
 
   //piece selection and piece capturing
   let x = Math.floor(mouseX/CELL_SIZE);
