@@ -14,16 +14,8 @@ let selectedY = -1;
 let selectedPieceType = 0;
 let state = "redTurn";
 let winner;
-let redScore;
-let blackScore;
-let startingScore = 49;
-let pawnValue = 1;
-let chariotValue = 9;
-let horseValue = 4;
-let cannonValue = 4.5;
-let guardValue = 2;
-let elephantValue = 2.5;
 let redScoreElement;
+let blackScoreElement;
 
 
 
@@ -77,8 +69,12 @@ function setup() {
   link.position(-350, 100);
 
   redScoreElement = createP('Score: ');
-  redScoreElement.position(700, 500);
-  redScoreElement.style("color: red;")
+  redScoreElement.position(700, 450);
+  redScoreElement.style("color: red;");
+
+  blackScoreElement = createP('Score: ');
+  blackScoreElement.position(700, 200);
+  blackScoreElement.style("color: black;");
 }
 
 function draw() {
@@ -191,29 +187,27 @@ function displayRedScore() {
 
   //displays red score
   if (redScore >= blackScore) {
-    fill("red");
-    text("score: +" + (redScore - blackScore), 500, 500);
+    let newRedScore = redScore - blackScore;
+    redScoreElement.html(newRedScore);
   }
 
   else {
-    fill("red");
-    text("score: " + (redScore - blackScore), 500, 500);
+    let newRedScore = redScore - blackScore;
+    redScoreElement.html(newRedScore);
   }
-
-  
 }
 
 function displayBlackScore() {
 
   //displays black score
   if (blackScore >= redScore) {
-    fill("black");
-    text("score: +" + (blackScore - redScore), 500, 200);
+    let newBlackScore = blackScore - redScore;
+    blackScoreElement.html(newBlackScore);
   }
 
   else {
-    fill("black");
-    text("score: " + (blackScore - redScore), 500, 200);
+    let newBlackScore = blackScore - redScore;
+    blackScoreElement.html(newBlackScore);
   }
 }
 
@@ -284,7 +278,6 @@ function displayPieces() {
 
 function mousePressed() {
 
-  redScoreElement.html("did it work?");
 
   //piece selection and piece capturing
   let x = Math.floor(mouseX/CELL_SIZE);
