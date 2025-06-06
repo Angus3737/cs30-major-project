@@ -36,24 +36,31 @@ function preload() {
   //load images for pieces and river
   redKing = loadImage("redking.png");
   blackKing = loadImage("blackking.png");
+  kingMovement = loadImage("imagekingmove.gif");
 
   redPawn = loadImage("redpawn.png");
   blackPawn = loadImage("blackpawn.png");
+  pawnMovement = loadImage("imagepawnmove.gif");
 
   redCannon = loadImage("redcannon.png");
   blackCannon = loadImage("blackcannon.png");
+  cannonMovement = loadImage("imagecannonmove");
 
   redChariot = loadImage("redchariot.png");
   blackChariot = loadImage("blackchariot.png");
+  chariotMovement = loadImage("imagechariotmove.gif");
 
   redHorse = loadImage("redhorse.png");
   blackHorse = loadImage("blackhorse.png");
+  horseMovement = loadImage("imagehorsemove.gif");
 
   redElephant = loadImage("redelephant.png");
   blackElephant = loadImage("blackelephant.png");
+  elephantMovement = loadImage("imageelephantmove.gif");
 
   redGuard = loadImage("redguard.png");
   blackGuard = loadImage("blackguard.png");
+  guardMovement = loadImage("imageguardmove.gif");
 
   water = loadImage("blue-water.avif");
 
@@ -247,6 +254,10 @@ function displayRedTurn() {
   }
 }
 
+// function displayRules() {
+
+// }
+
 function displayPieces() {
 
   //displays pieces using images
@@ -369,9 +380,6 @@ function mousePressed() {
             displayRedTurn();
           }
         }
-        // if (state !== "gameOver") {
-        //   state = state === "redTurn" ? "blackTurn" : "redTurn";
-        // }
       }
       else {
         selectedX = -1;
@@ -381,7 +389,8 @@ function mousePressed() {
       }
     }
 
-    else if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) || state === "blackTurn" && !clickedPiece.startsWith("r")) {
+    else if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) ||
+             state === "blackTurn" && !clickedPiece.startsWith("r")) {
       selectedX = x;
       selectedY = y;
       selectedPieceType = clickedPiece;

@@ -8,8 +8,7 @@ I am planning on building a computer version of chinese chess
 - the castle, which the king and guards cannot escape
 - rule which doesn’t allow the kings to face each other
 - horse and elephants blocking rule
-- highlights possible moves and possible captures
-- highlights kings square when in check
+- highlights a piece when selected
 - sound effects for capturing pieces
 
 
@@ -20,4 +19,5 @@ I am planning on building a computer version of chinese chess
 - displaying score for each team
 - different texture packs
 - have reminders for special rules pop up on the screen
-
+- easy access instructions
+- highlights posssible moves
