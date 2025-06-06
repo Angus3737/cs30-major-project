@@ -497,67 +497,6 @@ function moveChariot(oldX, oldY, newX, newY) {
   return true;
 }
 
-// function moveRedPawn(oldX, oldY, newX, newY) {
-  
-//   //red pawns move up
-//   //moves a piece only if move is legal
-//   let piece = board[oldY][oldX];
-//   let targetPiece = board[newY][newX];
-
-//   //check if the pawn is past the halfway point
-//   let hasCrossedRiver = oldY < 5;
-
-//   //can only move one square forward
-//   if (Math.abs(oldX - newX) + Math.abs(oldY - newY) !== 1) {
-//     return false;
-//   }
-
-//   //before crossing the river
-//   if (!hasCrossedRiver && newY >= oldY) {
-//     return false;
-//   }
-
-//   //can't capture your own piece
-//   if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
-//     return false;
-//   }
-
-//   //moves the piece
-//   board[newY][newX] = piece;
-//   board[oldY][oldX] = 0;
-//   return true;
-// }
-
-// function moveBlackPawn(oldX, oldY, newX, newY) {
-
-//   //black pawns move down
-//   //moves a piece only if move is legal
-//   let piece = board[oldY][oldX];
-//   let targetPiece = board[newY][newX];
-
-//   //check if the pawn is past the halfway point
-//   let hasCrossedRiver = oldY >= 5;
-
-//   //can only move one square forward
-//   if (Math.abs(oldX - newX) + Math.abs(newY - oldY) !== 1) {
-//     return false;
-//   }
-
-//   //before crossing the river
-//   if (!hasCrossedRiver && newY <= oldY) {
-//     return false;
-//   }
-
-//   //can't capture your own piece
-//   if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
-//     return false;
-//   }
-
-//   //moves the piece
-//   board[newY][newX] = piece;
-//   board[oldY][oldX] = 0;
-//   return true;
-// }
 
 function movePawn(oldX, oldY, newX, newY) {
   //red pawns move up
@@ -575,15 +514,11 @@ function movePawn(oldX, oldY, newX, newY) {
     //check if the pawn is past the halfway point
     let hasRedCrossedRiver = oldY < 5;
     if (!hasRedCrossedRiver && newY >= oldY) {
-      //can only move forward before crossing the river
-      if (newY >= oldY) {
-        return false;
-      }
-
-      //cant move backwards after crossing river
-      else if (newY > oldY) {
-        return false;
-      }
+      return false;
+    }
+    //cannot move backwards after crossing river
+    if (hasRedCrossedRiver && newY > oldY) {
+      return false;
     }
   }
 
@@ -597,17 +532,12 @@ function movePawn(oldX, oldY, newX, newY) {
     let hasBlackCrossedRiver = oldY >= 5;
     //before crossing the river
     if (!hasBlackCrossedRiver && newY <= oldY) {
+      return false;
+    }
 
-      //can only move forward before crossing the river
-      if (newY <= oldY) {
-        return false;
-      }
-
-
-      //cant move backwards after crossing river
-      else if (newY < oldY) {
-        return false;
-      }
+    //cannot move backwards after crossing river
+    if (hasBlackCrossedRiver && newY < oldY) {
+      return false;
     }
   }
 
