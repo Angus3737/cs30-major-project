@@ -72,9 +72,18 @@ function setup() {
   redScoreElement.position(700, 450);
   redScoreElement.style("color: red;");
 
+  // redTurnElement = createP("Red Turn");
+  // redTurnElement.position(-250, 450);
+  // redTurnElement.style("color: red;");
+
+
   blackScoreElement = createP('Score: ');
   blackScoreElement.position(700, 200);
   blackScoreElement.style("color: black;");
+
+  // blackTurnElement = createP("Black Turn");
+  // blackTurnElement.position(-250, 200);
+  // blackTurnElement.style("color: black;");
 }
 
 function draw() {
@@ -213,6 +222,31 @@ function displayBlackScore() {
   }
 }
 
+function displayBlackTurn() {
+  if (state === "blackTurn") {
+    blackTurnElement = createP("Black Turn");
+    blackTurnElement.position(-250, 200);
+    blackTurnElement.style("color: black;");
+  }
+  else {
+    redTurnElement = createP("Red Turn");
+    redTurnElement.position(-250, 450);
+    redTurnElement.style("color: red;");
+  }
+}
+
+function displayRedTurn() {
+  if (state === "redTurn") {
+    textSize(32);
+    redTurnElement = createP("Red Turn");
+    redTurnElement.position(-250, 450);
+    redTurnElement.style("color: red;");
+  }
+  else {
+    return false;
+  }
+}
+
 function displayPieces() {
 
   //displays pieces using images
@@ -323,9 +357,21 @@ function mousePressed() {
         playMoveSound();
         calculateBlackScore();
         calculateRedScore();
+
+        //alternate turns
         if (state !== "gameOver") {
-          state = state === "redTurn" ? "blackTurn" : "redTurn";
+          if (state === "redTurn") {
+            state = "blackTurn";
+            displayBlackTurn();
+          }
+          else {
+            state = "redTurn";
+            displayRedTurn();
+          }
         }
+        // if (state !== "gameOver") {
+        //   state = state === "redTurn" ? "blackTurn" : "redTurn";
+        // }
       }
       else {
         selectedX = -1;
