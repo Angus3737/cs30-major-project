@@ -296,10 +296,10 @@ function mousePressed() {
         pieceMoved = moveChariot(selectedX, selectedY, x, y);
       }
       else if (pieceSelectedType === 'rp') {
-        pieceMoved = moveRedPawn(selectedX, selectedY, x, y);
+        pieceMoved = movePawn(selectedX, selectedY, x, y);
       }
       else if (pieceSelectedType === 'p') {
-        pieceMoved = moveBlackPawn(selectedX, selectedY, x, y);
+        pieceMoved = movePawn(selectedX, selectedY, x, y);
       }
       else if (pieceSelectedType === 'rcan' || pieceSelectedType === 'can') {
         pieceMoved = moveCannon(selectedX, selectedY, x, y);
@@ -529,9 +529,16 @@ function movePawn(oldX, oldY, newX, newY) {
     //check if the pawn is past the halfway point
     let hasRedCrossedRiver = oldY < 5;
     if (!hasRedCrossedRiver && newY >= oldY) {
-      return false;
-    }
+      //can only move forward before crossing the river
+      if (newY >= oldY) {
+        return false;
+      }
 
+      //cant move backwards after crossing river
+      else if (newY > oldY) {
+        return false;
+      }
+    }
   }
 
 
@@ -544,7 +551,17 @@ function movePawn(oldX, oldY, newX, newY) {
     let hasBlackCrossedRiver = oldY >= 5;
     //before crossing the river
     if (!hasBlackCrossedRiver && newY <= oldY) {
-      return false;
+
+      //can only move forward before crossing the river
+      if (newY <= oldY) {
+        return false;
+      }
+
+
+      //cant move backwards after crossing river
+      else if (newY < oldY) {
+        return false;
+      }
     }
   }
 
