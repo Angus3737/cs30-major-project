@@ -83,11 +83,16 @@ function setup() {
   blackScoreElement.position(700, 200);
   blackScoreElement.style("color: black;");
 
-  turnElement = createP("Red Turn")
-  turnElement.position(20, 20);
+  turnElement = createP("Red Turn");
+  turnElement.position(-250, 200);
   turnElement.style("font-size", "24px");
   turnElement.style("font-weight", "bold");
 
+  easyInstructions = createP("Hold 'i' for easy access instructions");
+  easyInstructions.position(-350, 150);
+
+  // let chariotPic = createImg("imagechariotmove.gif");
+  // chariotPic.position(-350, 100);
 }
 
 function draw() {
@@ -114,6 +119,8 @@ function draw() {
 
   displayRedScore();
   displayBlackScore();
+
+  displayInstructions();
 
 }
 
@@ -226,34 +233,31 @@ function displayBlackScore() {
   }
 }
 
-function displayBlackTurn() {
-  if (state === "blackTurn") {
-    blackTurnElement = createP("Black Turn");
-    blackTurnElement.position(-250, 200);
-    blackTurnElement.style("color: black;");
-  }
-  else {
-    redTurnElement = createP("Red Turn");
-    redTurnElement.position(-250, 450);
-    redTurnElement.style("color: red;");
-  }
-}
-
-function displayRedTurn() {
-  if (state === "redTurn") {
-    textSize(32);
-    redTurnElement = createP("Red Turn");
-    redTurnElement.position(-250, 450);
-    redTurnElement.style("color: red;");
-  }
-  else {
-    return false;
-  }
-}
-
 function displayTurn() {
+  if (state === "redTurn") {
+    turnElement = createP("Red Turn");
+    // redTurnElement.position(-250, 450);
+    turnElement.style("color: red;");
+  }
 
-  
+  if (state === "blackTurn") {
+    turnElement = createP("Black Turn");
+    // blackTurnElement.position(-250, 200);
+    turnElement.style("color: black;");
+  }
+}
+
+function displayInstructions() {
+  if (keyIsDown(73)) {
+    image(chariotMovement, 0, 500, 200, 200);
+    image(horseMovement, 0, 0, 200, 200);
+    image(elephantMovement, 0, 0, 200, 200);
+    image(guardMovement, 0, 0, 200, 200);
+    image(kingMovement, 0, 0, 200, 200);
+    image(cannonMovement, 0, 0, 200, 200);
+    image(pawnMovement, 0, 0, 200, 200);
+
+  }
 }
 
 function displayPieces() {
@@ -371,11 +375,9 @@ function mousePressed() {
         if (state !== "gameOver") {
           if (state === "redTurn") {
             state = "blackTurn";
-            displayBlackTurn();
           }
           else {
             state = "redTurn";
-            displayRedTurn();
           }
         }
       }
