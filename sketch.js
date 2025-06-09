@@ -83,10 +83,15 @@ function setup() {
   blackScoreElement.position(700, 200);
   blackScoreElement.style("color: black;");
 
-  turnElement = createP("Red Turn");
-  turnElement.position(-250, 200);
-  turnElement.style("font-size", "24px");
-  turnElement.style("font-weight", "bold");
+  redTurnElement = createP("Red Turn");
+  redTurnElement.position(-250, 200);
+  redTurnElement.style("font-size", "24px");
+  redTurnElement.style("font-weight", "bold");
+
+  blackTurnElement = createP("Black Turn");
+  blackTurnElement.position(-250, 200);
+  blackTurnElement.style("font-size", "24px");
+  blackTurnElement.style("font-weight", "bold");
 
   easyInstructions = createP("Hold 'i' for easy access instructions");
   easyInstructions.position(-350, 150);
@@ -233,17 +238,22 @@ function displayBlackScore() {
   }
 }
 
+
 function displayTurn() {
   if (state === "redTurn") {
-    turnElement = createP("Red Turn");
-    // redTurnElement.position(-250, 450);
-    turnElement.style("color: red;");
+    // redTurnElement = createP("Red Turn");
+    redTurnElement.style("color: red;");
+    redTurnElement.style("visibility: visible;");
+    blackTurnElement.style("visibility: hidden;");
+    
   }
 
   if (state === "blackTurn") {
-    turnElement = createP("Black Turn");
-    // blackTurnElement.position(-250, 200);
+    // turnElement = createP("Black Turn");
     turnElement.style("color: black;");
+    blackTurnElement.style("visibility: visible;");
+    redTurnElement.style("visibility: hidden;");
+
   }
 }
 
