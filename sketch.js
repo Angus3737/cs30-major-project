@@ -44,7 +44,7 @@ function preload() {
 
   redCannon = loadImage("redcannon.png");
   blackCannon = loadImage("blackcannon.png");
-  cannonMovement = loadImage("imagecannonmove");
+  cannonMovement = loadImage("imagecannonmove.gif");
 
   redChariot = loadImage("redchariot.png");
   blackChariot = loadImage("blackchariot.png");
@@ -79,18 +79,15 @@ function setup() {
   redScoreElement.position(700, 450);
   redScoreElement.style("color: red;");
 
-  // redTurnElement = createP("Red Turn");
-  // redTurnElement.position(-250, 450);
-  // redTurnElement.style("color: red;");
-
-
   blackScoreElement = createP('Score: ');
   blackScoreElement.position(700, 200);
   blackScoreElement.style("color: black;");
 
-  // blackTurnElement = createP("Black Turn");
-  // blackTurnElement.position(-250, 200);
-  // blackTurnElement.style("color: black;");
+  turnElement = createP("Red Turn")
+  turnElement.position(20, 20);
+  turnElement.style("font-size", "24px");
+  turnElement.style("font-weight", "bold");
+
 }
 
 function draw() {
@@ -254,9 +251,10 @@ function displayRedTurn() {
   }
 }
 
-// function displayRules() {
+function displayTurn() {
 
-// }
+  
+}
 
 function displayPieces() {
 
@@ -609,6 +607,7 @@ function moveCannon(oldX, oldY, newX, newY) {
     board[oldY][oldX] = 0;
     return true;
   }
+  return false;
 }
 
 function moveHorse(oldX, oldY, newX, newY) {
@@ -617,7 +616,7 @@ function moveHorse(oldX, oldY, newX, newY) {
   let piece = board[oldY][oldX];
   let targetPiece = board[newY][newX];
 
-  //can only move one square forward
+  //moves in an L shape
   if (!(Math.abs(newX - oldX) === 1 && Math.abs(oldY - newY) === 2 || Math.abs(newX - oldX) === 2 && Math.abs(oldY - newY) === 1)) {
     return false;
   }
