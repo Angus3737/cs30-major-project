@@ -96,8 +96,6 @@ function setup() {
   easyInstructions = createP("Hold 'i' for easy access instructions");
   easyInstructions.position(-350, 150);
 
-  // let chariotPic = createImg("imagechariotmove.gif");
-  // chariotPic.position(-350, 100);
 }
 
 function draw() {
@@ -125,6 +123,7 @@ function draw() {
   displayRedScore();
   displayBlackScore();
 
+  // displayTurn();
   displayInstructions();
 
 }
@@ -215,12 +214,12 @@ function displayRedScore() {
   //displays red score
   if (redScore >= blackScore) {
     let newRedScore = redScore - blackScore;
-    redScoreElement.html(newRedScore);
+    redScoreElement.html("score: " + newRedScore);
   }
 
   else {
     let newRedScore = redScore - blackScore;
-    redScoreElement.html(newRedScore);
+    redScoreElement.html("score: " + newRedScore);
   }
 }
 
@@ -229,43 +228,44 @@ function displayBlackScore() {
   //displays black score
   if (blackScore >= redScore) {
     let newBlackScore = blackScore - redScore;
-    blackScoreElement.html(newBlackScore);
+    blackScoreElement.html("score: " + newBlackScore);
   }
 
   else {
     let newBlackScore = blackScore - redScore;
-    blackScoreElement.html(newBlackScore);
+    blackScoreElement.html("score: " + newBlackScore);
   }
 }
 
 
-function displayTurn() {
-  if (state === "redTurn") {
-    // redTurnElement = createP("Red Turn");
-    redTurnElement.style("color: red;");
-    redTurnElement.style("visibility: visible;");
-    blackTurnElement.style("visibility: hidden;");
+// function displayTurn() {
+//   if (state === "redTurn") {
+//     // redTurnElement = createP("Red Turn");
+//     redTurnElement.style("color: red;");
+//     redTurnElement.style("visibility: visible;");
+//     blackTurnElement.style("visibility: hidden;");
     
-  }
+//   }
 
-  if (state === "blackTurn") {
-    // turnElement = createP("Black Turn");
-    turnElement.style("color: black;");
-    blackTurnElement.style("visibility: visible;");
-    redTurnElement.style("visibility: hidden;");
+//   else if (state === "blackTurn") {
+//     // turnElement = createP("Black Turn");
+//     turnElement.style("color: black;");
+//     blackTurnElement.style("visibility: visible;");
+//     redTurnElement.style("visibility: hidden;");
 
-  }
-}
+//   }
+// }
 
 function displayInstructions() {
   if (keyIsDown(73)) {
-    image(chariotMovement, 0, 500, 200, 200);
-    image(horseMovement, 0, 0, 200, 200);
-    image(elephantMovement, 0, 0, 200, 200);
-    image(guardMovement, 0, 0, 200, 200);
-    image(kingMovement, 0, 0, 200, 200);
-    image(cannonMovement, 0, 0, 200, 200);
-    image(pawnMovement, 0, 0, 200, 200);
+    // fill("black");
+    image(chariotMovement, 20, 480, 200, 200);
+    image(horseMovement, 220, 480, 200, 200);
+    image(elephantMovement, 430, 480, 200, 200);
+    image(guardMovement, 50, 280, 250, 200);
+    image(kingMovement, 350, 280, 250, 200);
+    image(cannonMovement, 50, 50, 200, 220);
+    image(pawnMovement, 300, 50, 200, 200);
 
   }
 }
