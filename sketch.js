@@ -11,7 +11,6 @@ let redKing;
 let greenKing;
 let selectedX = -1;
 let selectedY = -1;
-let selectedPieceType = 0;
 let state = "redTurn";
 let winner;
 let redScoreElement;
@@ -33,6 +32,7 @@ let board = [
 ];
 
 function preload() {
+
   //load images for pieces and river
   redKing = loadImage("redking.png");
   blackKing = loadImage("blackking.png");
@@ -74,27 +74,29 @@ function setup() {
   //creates link to "how to play"
   let link = createA('https://www.ymimports.com/pages/how-to-play-xiangqi-chinese-chess', 'How to Play');
   link.position(-350, 100);
+  link.style("font-size", "25px");
+
 
   redScoreElement = createP('Score: ');
-  redScoreElement.position(700, 450);
+  redScoreElement.position(700, 400);
   redScoreElement.style("color: red;");
 
   blackScoreElement = createP('Score: ');
-  blackScoreElement.position(700, 200);
+  blackScoreElement.position(700, 250);
   blackScoreElement.style("color: black;");
 
   redTurnElement = createP("Red Turn");
-  redTurnElement.position(-250, 200);
-  redTurnElement.style("font-size", "24px");
+  redTurnElement.position(-250, 300);
+  redTurnElement.style("font-size", "30px");
   redTurnElement.style("font-weight", "bold");
 
   blackTurnElement = createP("Black Turn");
-  blackTurnElement.position(-250, 200);
-  blackTurnElement.style("font-size", "24px");
+  blackTurnElement.position(-250, 300);
+  blackTurnElement.style("font-size", "30px");
   blackTurnElement.style("font-weight", "bold");
 
   easyInstructions = createP("Hold 'i' for easy access instructions");
-  easyInstructions.position(-350, 150);
+  easyInstructions.position(-350, 170);
 
 }
 
@@ -103,7 +105,6 @@ function draw() {
 
   //show "game over" message after someone wins
   if (state === "gameOver") {
-
     textAlign(CENTER, CENTER);
     textSize(32);
     fill("black");
@@ -123,7 +124,7 @@ function draw() {
   displayRedScore();
   displayBlackScore();
 
-  // displayTurn();
+  displayTurn();
   displayInstructions();
 
 }
@@ -214,12 +215,12 @@ function displayRedScore() {
   //displays red score
   if (redScore >= blackScore) {
     let newRedScore = redScore - blackScore;
-    redScoreElement.html("score: " + newRedScore);
+    redScoreElement.html("Red Score: " + newRedScore);
   }
 
   else {
     let newRedScore = redScore - blackScore;
-    redScoreElement.html("score: " + newRedScore);
+    redScoreElement.html("Red Score: " + newRedScore);
   }
 }
 
@@ -228,35 +229,37 @@ function displayBlackScore() {
   //displays black score
   if (blackScore >= redScore) {
     let newBlackScore = blackScore - redScore;
-    blackScoreElement.html("score: " + newBlackScore);
+    blackScoreElement.html("Black Score: " + newBlackScore);
   }
 
   else {
     let newBlackScore = blackScore - redScore;
-    blackScoreElement.html("score: " + newBlackScore);
+    blackScoreElement.html("Black Score: " + newBlackScore);
   }
 }
 
 
-// function displayTurn() {
-//   if (state === "redTurn") {
-//     // redTurnElement = createP("Red Turn");
-//     redTurnElement.style("color: red;");
-//     redTurnElement.style("visibility: visible;");
-//     blackTurnElement.style("visibility: hidden;");
+function displayTurn() {
+
+  //displays who's turn it is
+  if (state === "redTurn") {
+    redTurnElement.style("color: red;");
+    redTurnElement.style("visibility", "visible");
+    blackTurnElement.style("visibility", "hidden");
     
-//   }
+  }
 
-//   else if (state === "blackTurn") {
-//     // turnElement = createP("Black Turn");
-//     turnElement.style("color: black;");
-//     blackTurnElement.style("visibility: visible;");
-//     redTurnElement.style("visibility: hidden;");
+  else if (state === "blackTurn") {
+    blackTurnElement.style("color: black;");
+    blackTurnElement.style("visibility", "visible");
+    redTurnElement.style("visibility", "hidden");
 
-//   }
-// }
+  }
+}
 
 function displayInstructions() {
+
+  //displays instructions if 'i' is held down
   if (keyIsDown(73)) {
     // fill("black");
     image(chariotMovement, 20, 480, 200, 200);
@@ -337,7 +340,6 @@ function displayPieces() {
 
 function mousePressed() {
 
-
   //piece selection and piece capturing
   let x = Math.floor(mouseX/CELL_SIZE);
   let y = Math.floor(mouseY/CELL_SIZE);
@@ -373,8 +375,7 @@ function mousePressed() {
 
       pieceSelected = false;
 
-      //alternate turns if moved and if king wasn't captured
-      //plays audio and updates score
+      //if move was made
       if (pieceMoved) {
         checkForWin();
         playMoveSound();
@@ -392,18 +393,19 @@ function mousePressed() {
         }
       }
       else {
+
+        //if move invalid, then clear the selection
         selectedX = -1;
         selectedY = -1;
-        selectedPieceType = 0;
         pieceSelectedType = 0;
       }
     }
 
+    //checks if selected piece belongs to the correct player
     else if (clickedPiece !== 0 && (state === "redTurn" && clickedPiece.startsWith("r")) ||
              state === "blackTurn" && !clickedPiece.startsWith("r")) {
       selectedX = x;
       selectedY = y;
-      selectedPieceType = clickedPiece;
       pieceSelectedType = clickedPiece;
       pieceSelected = true;
     }
@@ -518,6 +520,7 @@ function moveChariot(oldX, oldY, newX, newY) {
 
 
 function movePawn(oldX, oldY, newX, newY) {
+
   //red pawns move up
   //moves a piece only if move is legal
   let piece = board[oldY][oldX];
