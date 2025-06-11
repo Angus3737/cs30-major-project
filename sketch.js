@@ -11,10 +11,12 @@ let redKing;
 let greenKing;
 let selectedX = -1;
 let selectedY = -1;
-let state = "redTurn";
+// let state = "redTurn";
+let state = "starting";
 let winner;
 let redScoreElement;
 let blackScoreElement;
+
 
 
 
@@ -66,6 +68,9 @@ function preload() {
 
   //load sound effects
   audioMove = createAudio("movementsound.mp3");
+
+  //starting screen
+  startingScreen = loadImage("chinesebackground.jpg");
 }
 
 function setup() {
@@ -77,11 +82,11 @@ function setup() {
   link.style("font-size", "25px");
 
 
-  redScoreElement = createP('Score: ');
+  redScoreElement = createP();
   redScoreElement.position(700, 400);
   redScoreElement.style("color: red;");
 
-  blackScoreElement = createP('Score: ');
+  blackScoreElement = createP();
   blackScoreElement.position(700, 250);
   blackScoreElement.style("color: black;");
 
@@ -103,6 +108,21 @@ function setup() {
 function draw() {
   background(220);
 
+  //starting screen
+  if (state === "starting") {
+    background(startingScreen);
+    textAlign(CENTER, CENTER);
+    textSize(50);
+    fill("black");
+    text("Chinese Chess", width / 2, height / 2 - 100);
+    text("(XiangQi)", width / 2, height / 2);
+    textSize(20);
+    text("click to begin", width / 2, height / 2 + 130);
+    blackTurnElement.style("visibility", "hidden");
+    redTurnElement.style("visibility", "hidden");
+
+  }
+
   //show "game over" message after someone wins
   if (state === "gameOver") {
     textAlign(CENTER, CENTER);
@@ -112,21 +132,22 @@ function draw() {
     return;
   }
 
-  //displaying the whole board
-  displayGrid();
-  displayRiver();
-  displayPieces();
+  if (state !== "starting") {
+    //displaying the whole board
+    displayGrid();
+    displayRiver();
+    displayPieces();
 
-  //displaying score
-  calculateRedScore();
-  calculateBlackScore();
+    //displaying score
+    calculateRedScore();
+    calculateBlackScore();
 
-  displayRedScore();
-  displayBlackScore();
+    displayRedScore();
+    displayBlackScore();
 
-  displayTurn();
-  displayInstructions();
-
+    displayTurn();
+    displayInstructions();
+  }
 }
 
 function displayGrid() {
@@ -339,6 +360,10 @@ function displayPieces() {
 }
 
 function mousePressed() {
+
+  if (state === "starting") {
+    state = "redTurn";
+  }
 
   //piece selection and piece capturing
   let x = Math.floor(mouseX/CELL_SIZE);
