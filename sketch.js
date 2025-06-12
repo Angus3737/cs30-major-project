@@ -70,7 +70,7 @@ function preload() {
   audioMove = createAudio("movementsound.mp3");
 
   //starting screen
-  startingScreen = loadImage("chinesebackground.jpg");
+  startingScreen = loadImage("backgrounddesign.png");
 }
 
 function setup() {
@@ -81,7 +81,7 @@ function setup() {
   link.position(-350, 100);
   link.style("font-size", "25px");
 
-
+  //creates element for the score
   redScoreElement = createP();
   redScoreElement.position(700, 400);
   redScoreElement.style("color: red;");
@@ -90,6 +90,7 @@ function setup() {
   blackScoreElement.position(700, 250);
   blackScoreElement.style("color: black;");
 
+  //creates element for who's turn it is
   redTurnElement = createP("Red Turn");
   redTurnElement.position(-250, 300);
   redTurnElement.style("font-size", "30px");
@@ -100,27 +101,19 @@ function setup() {
   blackTurnElement.style("font-size", "30px");
   blackTurnElement.style("font-weight", "bold");
 
+  //shows user how to access instructions
   easyInstructions = createP("Hold 'i' for easy access instructions");
   easyInstructions.position(-350, 170);
 
 }
 
 function draw() {
+
   background(220);
 
   //starting screen
   if (state === "starting") {
-    background(startingScreen);
-    textAlign(CENTER, CENTER);
-    textSize(50);
-    fill("black");
-    text("Chinese Chess", width / 2, height / 2 - 100);
-    text("(XiangQi)", width / 2, height / 2);
-    textSize(20);
-    text("click to begin", width / 2, height / 2 + 130);
-    blackTurnElement.style("visibility", "hidden");
-    redTurnElement.style("visibility", "hidden");
-
+    displayStart();
   }
 
   //show "game over" message after someone wins
@@ -132,13 +125,14 @@ function draw() {
     return;
   }
 
+  //gameplay
   if (state !== "starting") {
     //displaying the whole board
     displayGrid();
     displayRiver();
     displayPieces();
 
-    //displaying score
+    //displaying score and turn
     calculateRedScore();
     calculateBlackScore();
 
@@ -150,9 +144,24 @@ function draw() {
   }
 }
 
+function displayStart() {
+
+  //display the starting screen
+  background(startingScreen);
+  textAlign(CENTER, CENTER);
+  textSize(50);
+  fill("black");
+  text("Chinese Chess", width / 2, height / 2 - 100);
+  text("(XiangQi)", width / 2, height / 2);
+  textSize(20);
+  text("click to begin", width / 2, height / 2 + 130);
+  blackTurnElement.style("visibility", "hidden");
+  redTurnElement.style("visibility", "hidden");
+}
+
 function displayGrid() {
 
-  // draws the board
+  //draws the board
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
       fill(247, 219, 167);
@@ -233,30 +242,17 @@ function calculateBlackScore() {
 
 function displayRedScore() {
 
-  //displays red score
-  if (redScore >= blackScore) {
-    let newRedScore = redScore - blackScore;
-    redScoreElement.html("Red Score: " + newRedScore);
-  }
-
-  else {
-    let newRedScore = redScore - blackScore;
-    redScoreElement.html("Red Score: " + newRedScore);
-  }
+  // //displays red score
+  let newRedScore = redScore - blackScore;
+  redScoreElement.html("Red Score: " + newRedScore);
 }
 
 function displayBlackScore() {
 
   //displays black score
-  if (blackScore >= redScore) {
-    let newBlackScore = blackScore - redScore;
-    blackScoreElement.html("Black Score: " + newBlackScore);
-  }
-
-  else {
-    let newBlackScore = blackScore - redScore;
-    blackScoreElement.html("Black Score: " + newBlackScore);
-  }
+  let newBlackScore = blackScore - redScore;
+  blackScoreElement.html("Black Score: " + newBlackScore);
+  
 }
 
 
@@ -282,14 +278,14 @@ function displayInstructions() {
 
   //displays instructions if 'i' is held down
   if (keyIsDown(73)) {
-    // fill("black");
-    image(chariotMovement, 20, 480, 200, 200);
+    background(53, 53, 53);
+    image(chariotMovement, 10, 480, 200, 200);
     image(horseMovement, 220, 480, 200, 200);
     image(elephantMovement, 430, 480, 200, 200);
-    image(guardMovement, 50, 280, 250, 200);
-    image(kingMovement, 350, 280, 250, 200);
-    image(cannonMovement, 50, 50, 200, 220);
-    image(pawnMovement, 300, 50, 200, 200);
+    image(guardMovement, 50, 260, 250, 200);
+    image(kingMovement, 350, 260, 250, 200);
+    image(cannonMovement, 100, 20, 200, 220);
+    image(pawnMovement, 350, 20, 200, 200);
 
   }
 }
@@ -370,6 +366,8 @@ function mousePressed() {
   let y = Math.floor(mouseY/CELL_SIZE);
   if (x >= 0 && x < cols && y >= 0 && y < rows) {
     let clickedPiece = board[y][x];
+    // fill("green");
+    // square(board[x], board[y], CELL_SIZE);
     if (pieceSelected) {
       let pieceMoved = false;
 
@@ -446,6 +444,7 @@ function playMoveSound() {
 
 function moveKing(oldX, oldY, newX, newY) {
 
+  
   //moves a piece only if move is legal
   let piece = board[oldY][oldX];
   let targetPiece = board[newY][newX];
