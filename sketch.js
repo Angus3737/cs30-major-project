@@ -11,7 +11,6 @@ let redKing;
 let greenKing;
 let selectedX = -1;
 let selectedY = -1;
-// let state = "redTurn";
 let state = "starting";
 let winner;
 let redScoreElement;
@@ -352,6 +351,16 @@ function displayPieces() {
         image(blackGuard, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
       }
     }
+  }
+}
+
+function highlightSelectedPiece() {
+
+  //highlights the square of a selected piece
+  if (pieceSelected && selectedX !== -1 && selectedY !== -1) {
+    noFill();
+    stroke("green");
+    
   }
 }
 
