@@ -557,7 +557,6 @@ function moveChariot(oldX, oldY, newX, newY) {
   return true;
 }
 
-
 function movePawn(oldX, oldY, newX, newY) {
 
   //red pawns move up
@@ -583,7 +582,6 @@ function movePawn(oldX, oldY, newX, newY) {
     }
   }
 
-
   if (pieceSelectedType === "p") {
     //can only move one square forward
     if (Math.abs(oldX - newX) + Math.abs(newY - oldY) !== 1) {
@@ -601,7 +599,6 @@ function movePawn(oldX, oldY, newX, newY) {
       return false;
     }
   }
-
 
   //can't capture your own piece
   if (targetPiece !== 0 && sameTeam(piece, targetPiece)) {
@@ -638,6 +635,7 @@ function moveCannon(oldX, oldY, newX, newY) {
       }
     }
   }
+  
   else {
     //horizontally
     let minX = Math.min(oldX, newX);

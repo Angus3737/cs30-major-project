@@ -1,7 +1,13 @@
 # Beta-Testing
 
 ## Non-Programmer's Comments
-
+- can't understand who moves first
+- interesting moves and pieces
+- asthetic design
+- confusing river
+- could maybe animate the pieces
+- should show possible piece moves
+- instructions are easy to understand
 
 ## Programmer's Comments
 - easy to understand instructions
