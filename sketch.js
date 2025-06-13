@@ -649,6 +649,7 @@ function moveCannon(oldX, oldY, newX, newY) {
     }
   }
 
+  //movement
   if (targetPiece === 0) {
     if (count === 0) {
       board[newY][newX] = piece;
@@ -656,6 +657,8 @@ function moveCannon(oldX, oldY, newX, newY) {
       return true;
     }
   }
+
+  //capture
   else if (!sameTeam(piece, targetPiece) && count === 1) {
     board[newY][newX] = piece;
     board[oldY][oldX] = 0;
