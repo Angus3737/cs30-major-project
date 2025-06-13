@@ -129,6 +129,7 @@ function draw() {
     //displaying the whole board
     displayGrid();
     displayRiver();
+    highlightSelectedPiece();
     displayPieces();
 
     //displaying score and turn
@@ -359,8 +360,13 @@ function highlightSelectedPiece() {
   //highlights the square of a selected piece
   if (pieceSelected && selectedX !== -1 && selectedY !== -1) {
     noFill();
+    strokeWeight(5);
     stroke("green");
-    
+    square(selectedX * CELL_SIZE, selectedY * CELL_SIZE, CELL_SIZE);
+
+    //reset square
+    strokeWeight(1);
+    stroke(0);
   }
 }
 
